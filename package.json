@@ -1,0 +1,10 @@
+{
+	"name": "doubleAgent",
+	"version": "0.0.0",
+	"dependencies": {
+		"express": "latest",
+		"mongoose": "latest",
+		"request":"latest",
+		"async":"latest"
+	}
+}
