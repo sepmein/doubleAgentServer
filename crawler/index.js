@@ -5,9 +5,9 @@ var getRepositoriesSeries = function getRepositoriesSeries(arg, callback) {
 	var option = (function(argument) {
 		var querySince;
 		if (argument > 0) {
-			querySince = argument
+			querySince = argument;
 		} else {
-			querySince = 0
+			querySince = 0;
 		};
 		return {
 			url: "https://api.github.com/repositories",
@@ -39,3 +39,7 @@ function(arg, callback) {
 }, function(arg, callback) {
 	getRepositoriesSeries(arg, callback);
 }]);
+
+// var queue = async.queue(function(task, callback){
+// 	getRepositoriesSeries(task, callback);
+// })
