@@ -32,6 +32,7 @@ Crawler.makeRequest = function makeRequest(arg, callback) {
 		console.log(lastId);
 		callback(null, lastId);
 	});
+
 };
 
 
@@ -69,14 +70,14 @@ module.exports = Crawler;
 var crawler = {
 	master: {
 		assignTask: '',
-        loadBalance: '',
+		loadBalance: '',
 		createWorker: '',
 		destoryWorker: ''
 	},
 	worker: {
-		id:'',
+		id: '',
 		onAssign: '',
-	    onFinish: '',
+		onFinish: '',
 		saveToDb: ''
 
 	}
