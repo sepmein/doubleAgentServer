@@ -12,29 +12,34 @@ var EventEmitter = require('events').EventEmitter;
 var master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
 master.on('taskFinished', function(seal, produce) {
-	slaves.bornABabySlave(since, this.job);
+	var slaves.bornABabySlave(since);
+
 	slaves.killTheElderSlave(seal);
 	//	console.log('taskFinished and since is :' + since);
 });
-master.on('taskUnfinished',function(seal){
+master.on('taskUnfinished', function(seal) {
 
 });
 
 //data level of jobs
-var job = function(cb){
+var job = function(content, whenDone) {
 	//just for testment
-	cb('job done');
+
+	function(content) {
+		var produce = content + ' something something';
+		whenDone(produce);
+	}
+
 };
 
 
 //prototype of Slave
 //seal is the only id of the slave
 //印章是奴隶的唯一标示
-var Slave = function Slave(since, job) {
+var Slave = function Slave(since) {
 	this.seal = util.generateRandom(20);
 	this.since = since || 0;
 	this.produce = null;
-	this.job = job || null;
 };
 //when task is finished send a message to master 
 //当任务完成时，向主人发送一条消息
@@ -48,7 +53,8 @@ Slave.prototype.sendMessageToMaster = function() {
 };
 Slave.prototype.workWork = function(job) {
 	var self = this;
-	function whenDone(produce){
+
+	function whenDone(produce) {
 		self.produce = produce;
 		self.sendMessageToMaster();
 	}
@@ -63,8 +69,8 @@ slaves.list = {};
 //born a baby slave
 //@type: function
 //@param: Since (type:num) - github api params get repositories from 'since'
-slaves.bornABabySlave = function(since, job) {
-	var newBornSlave = new Slave(since, job);
+slaves.bornABabySlave = function(since) {
+	var newBornSlave = new Slave(since);
 	this.list[newBornSlave.seal] = newBornSlave;
 	console.dir(this.list);
 	return newBornSlave.seal;
