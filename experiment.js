@@ -1,6 +1,8 @@
 'use strict';
 
-var util = require('./util');
+var t9Util = require('./util');
+var inherits = require('util').inherits;
+var async = require('async');
 // create a task, run that task, get a result from that task, create a task based on that
 
 //when task finished deliver the data to the controller and db
@@ -11,26 +13,26 @@ var util = require('./util');
 var EventEmitter = require('events').EventEmitter;
 var master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
-master.on('taskFinished', function(seal, produce) {
+master.on('taskFinished', function (seal, produce) {
+	console.log('[called] master.on.taskFinished');
 	//elder's produce is new born's since
 	var since = produce;
 	//delete the elder one, free memory
 	slaves.killTheElderSlave(seal);
 	//create a new slave, 依赖slaves
 	var newSlave = slaves.bornABabySlave(since);
-	//assign him a job, 依赖job
-	newSlave.workWork(job);
-	//	console.log('taskFinished and since is :' + since);
+	//assign him a job
+//	newSlave.workWork();
 });
-master.on('taskUnfinished', function(seal) {
+master.on('taskUnfinished', function (seal) {
 
 });
 
 //data level of jobs
-var job = function(content, whenDone) {
-	//just for testment
+var job = function (content, whenDone) {
+	//just for test
 	var produce = 0;
-	produce ++;
+	produce++;
 	console.log(produce);
 	whenDone(produce);
 };
@@ -40,33 +42,36 @@ var job = function(content, whenDone) {
 //seal is the only id of the slave
 //印章是奴隶的唯一标示
 var Slave = function Slave(since) {
-	this.seal = util.generateRandom(20);
+	//EventEmitter.call(this);
+	this.seal = t9Util.generateRandom(20);
 	this.since = since || 0;
 	this.produce = null;
 };
 //when task is finished send a message to master 
 //当任务完成时，向主人发送一条消息
-Slave.prototype.sendMessageToMaster = function() {
+Slave.prototype.sendMessageToMaster = function () {
+	console.log('[called] slave.sendMessageToMaster');
 	if (this.produce !== null) {
-		console.log(this.seal);
 		master.emit('taskFinished', this.seal, this.produce);
+		console.log(this.seal);
+		console.log('blabla');
 	} else {
 		master.emit('taskUnfinished', this.seal);
 	}
-
 };
-Slave.prototype.workWork = function(job) {
+Slave.prototype.workWork = function () {
+	console.log('[called] slave.work');
 	var self = this;
 
 	//完成工作后，获得工作成果，并向master发送一条消息
-	function whenDone(produce) {
-		self.produce = produce;
-		self.sendMessageToMaster();
-	}
 	//call the job fn, deliver the Slave's since
-	job(this.since, whenDone);
+	self.produce = self.since + 1;
 	console.log('sadflasldflasdf');
+	master.emit('taskFinished', this.seal, this.produce);
+
+	//self.sendMessageToMaster();
 };
+//inherits(Slave, EventEmitter);
 
 //slaves
 //Data level about slave
@@ -76,7 +81,8 @@ slaves.list = {};
 //born a baby slave
 //@type: function
 //@param: Since (type:num) - github api params get repositories from 'since'
-slaves.bornABabySlave = function(since) {
+slaves.bornABabySlave = function (since) {
+	console.log('[called] bornABabySlave');
 	var newBornSlave = new Slave(since);
 	this.list[newBornSlave.seal] = newBornSlave;
 	//console.dir(this.list);
@@ -85,12 +91,12 @@ slaves.bornABabySlave = function(since) {
 //kill the elder slave, free memory in order to get job cycled
 //@type: function
 //@param: seal, generated at the borning state of a baby slave
-slaves.killTheElderSlave = function(seal) {
+slaves.killTheElderSlave = function (seal) {
+	console.log('[called] killTheElderSlave');
 	//console.log(this.list);
 	var killed = delete this.list[seal];
 	return killed;
 };
-
 
 
 //test codes
@@ -103,6 +109,6 @@ var slave2 = new Slave();
 assert.notEqual(slave1.seal, slaves.seal);
 
 var babySlave = slaves.bornABabySlave(100);
-babySlave.workWork(job);
+babySlave.workWork();
 var killed = slaves.killTheElderSlave(babySlave.seal);
 assert.strictEqual(killed, true);
