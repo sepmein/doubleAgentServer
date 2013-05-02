@@ -13,7 +13,7 @@ var async = require('async');
 var EventEmitter = require('events').EventEmitter;
 var master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
-master.on('taskFinished', function (seal, produce) {
+master.on('taskFinished', function(seal, produce) {
 	if (produce <= 10000) {
 		console.log('[called] master.on.taskFinished');
 		//elder's produce is new born's since
@@ -28,12 +28,12 @@ master.on('taskFinished', function (seal, produce) {
 
 	}
 });
-master.on('taskUnfinished', function (seal) {
+master.on('taskUnfinished', function(seal) {
 
 });
 
 //data level of jobs
-var job = function (content, whenDone) {
+var job = function(content, whenDone) {
 	//just for test
 	var produce = 0;
 	produce++;
@@ -53,7 +53,7 @@ var Slave = function Slave(since) {
 };
 //when task is finished send a message to master 
 //当任务完成时，向主人发送一条消息
-Slave.prototype.sendMessageToMaster = function () {
+Slave.prototype.sendMessageToMaster = function() {
 	console.log('[called] slave.sendMessageToMaster');
 	if (this.produce !== null) {
 		master.emit('taskFinished', this.seal, this.produce);
@@ -63,7 +63,7 @@ Slave.prototype.sendMessageToMaster = function () {
 		master.emit('taskUnfinished', this.seal);
 	}
 };
-Slave.prototype.workWork = function () {
+Slave.prototype.workWork = function() {
 	console.log('[called] slave.work');
 	var self = this;
 
@@ -86,7 +86,7 @@ slaves.list = {};
 //born a baby slave
 //@type: function
 //@param: Since (type:num) - github api params get repositories from 'since'
-slaves.bornABabySlave = function (since) {
+slaves.bornABabySlave = function(since) {
 	console.log('[called] bornABabySlave');
 	var newBornSlave = new Slave(since);
 	this.list[newBornSlave.seal] = newBornSlave;
@@ -96,7 +96,7 @@ slaves.bornABabySlave = function (since) {
 //kill the elder slave, free memory in order to get job cycled
 //@type: function
 //@param: seal, generated at the borning state of a baby slave
-slaves.killTheElderSlave = function (seal) {
+slaves.killTheElderSlave = function(seal) {
 	console.log('[called] killTheElderSlave');
 	//console.log(this.list);
 	var killed = delete this.list[seal];
@@ -117,25 +117,3 @@ slaves.killTheElderSlave = function (seal) {
 //babySlave.workWork();
 //var killed = slaves.killTheElderSlave(babySlave.seal);
 //assert.strictEqual(killed, true);
-
-var taskList = [
-	function (callback) {
-		callback(null, 0);
-	}];
-var memoryUsage = [];
-for (var i = 100000; i--; i > 0) {
-	taskList.push(function (arg, callback) {
-		var added = arg + 1;
-		console.log('called ' + added);
-		memoryUsage.push(process.memoryUsage().rss);
-		callback(null, added);
-	});
-}
-async.waterfall(taskList, function (err, callback) {
-	if (err) {
-		console.log(err);
-	} else {
-		console.dir(memoryUsage);
-		require('fs').pipe()
-	}
-});
