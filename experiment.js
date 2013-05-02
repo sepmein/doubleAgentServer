@@ -14,15 +14,19 @@ var EventEmitter = require('events').EventEmitter;
 var master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
 master.on('taskFinished', function (seal, produce) {
-	console.log('[called] master.on.taskFinished');
-	//elder's produce is new born's since
-	var since = produce;
-	//delete the elder one, free memory
-	slaves.killTheElderSlave(seal);
-	//create a new slave, 依赖slaves
-	var newSlave = slaves.bornABabySlave(since);
-	//assign him a job
-//	newSlave.workWork();
+	if (produce <= 10000) {
+		console.log('[called] master.on.taskFinished');
+		//elder's produce is new born's since
+		var since = produce;
+		//delete the elder one, free memory
+		slaves.killTheElderSlave(seal);
+		//create a new slave, 依赖slaves
+		var newSlave = slaves.bornABabySlave(since);
+		//assign him a job
+		newSlave.workWork();
+	} else {
+
+	}
 });
 master.on('taskUnfinished', function (seal) {
 
@@ -66,7 +70,8 @@ Slave.prototype.workWork = function () {
 	//完成工作后，获得工作成果，并向master发送一条消息
 	//call the job fn, deliver the Slave's since
 	self.produce = self.since + 1;
-	console.log('sadflasldflasdf');
+	console.log('I\'m ' + self.seal + ', and the produce of my work is ' + self.produce);
+	console.log(process.memoryUsage());
 	master.emit('taskFinished', this.seal, this.produce);
 
 	//self.sendMessageToMaster();
@@ -100,15 +105,37 @@ slaves.killTheElderSlave = function (seal) {
 
 
 //test codes
-var assert = require('assert');
-var slave1 = new Slave();
+//var assert = require('assert');
+//var slave1 = new Slave();
 //新建slave对象应成功，该对象应有一个seal值
-assert.notEqual(slave1.seal, null);
+//assert.notEqual(slave1.seal, null);
 //重新新建的slave对象应与刚才建立的对象不同
-var slave2 = new Slave();
-assert.notEqual(slave1.seal, slaves.seal);
+//var slave2 = new Slave();
+//assert.notEqual(slave1.seal, slaves.seal);
 
-var babySlave = slaves.bornABabySlave(100);
-babySlave.workWork();
-var killed = slaves.killTheElderSlave(babySlave.seal);
-assert.strictEqual(killed, true);
+//var babySlave = slaves.bornABabySlave(0);
+//babySlave.workWork();
+//var killed = slaves.killTheElderSlave(babySlave.seal);
+//assert.strictEqual(killed, true);
+
+var taskList = [
+	function (callback) {
+		callback(null, 0);
+	}];
+var memoryUsage = [];
+for (var i = 100000; i--; i > 0) {
+	taskList.push(function (arg, callback) {
+		var added = arg + 1;
+		console.log('called ' + added);
+		memoryUsage.push(process.memoryUsage().rss);
+		callback(null, added);
+	});
+}
+async.waterfall(taskList, function (err, callback) {
+	if (err) {
+		console.log(err);
+	} else {
+		console.dir(memoryUsage);
+		require('fs').pipe()
+	}
+});
