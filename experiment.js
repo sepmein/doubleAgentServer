@@ -12,9 +12,14 @@ var EventEmitter = require('events').EventEmitter;
 var master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
 master.on('taskFinished', function(seal, produce) {
-	var slaves.bornABabySlave(since);
-
+	//elder's produce is new born's since
+	var since = produce;
+	//delete the elder one, free memory
 	slaves.killTheElderSlave(seal);
+	//create a new slave, 依赖slaves
+	var newSlave = slaves.bornABabySlave(since);
+	//assign him a job, 依赖job
+	newSlave.workWork(job);
 	//	console.log('taskFinished and since is :' + since);
 });
 master.on('taskUnfinished', function(seal) {
@@ -24,12 +29,10 @@ master.on('taskUnfinished', function(seal) {
 //data level of jobs
 var job = function(content, whenDone) {
 	//just for testment
-
-	function(content) {
-		var produce = content + ' something something';
-		whenDone(produce);
-	}
-
+	var produce = 0;
+	produce ++;
+	console.log(produce);
+	whenDone(produce);
 };
 
 
@@ -45,6 +48,7 @@ var Slave = function Slave(since) {
 //当任务完成时，向主人发送一条消息
 Slave.prototype.sendMessageToMaster = function() {
 	if (this.produce !== null) {
+		console.log(this.seal);
 		master.emit('taskFinished', this.seal, this.produce);
 	} else {
 		master.emit('taskUnfinished', this.seal);
@@ -54,11 +58,14 @@ Slave.prototype.sendMessageToMaster = function() {
 Slave.prototype.workWork = function(job) {
 	var self = this;
 
+	//完成工作后，获得工作成果，并向master发送一条消息
 	function whenDone(produce) {
 		self.produce = produce;
 		self.sendMessageToMaster();
 	}
-	job(whenDone);
+	//call the job fn, deliver the Slave's since
+	job(this.since, whenDone);
+	console.log('sadflasldflasdf');
 };
 
 //slaves
@@ -72,13 +79,14 @@ slaves.list = {};
 slaves.bornABabySlave = function(since) {
 	var newBornSlave = new Slave(since);
 	this.list[newBornSlave.seal] = newBornSlave;
-	console.dir(this.list);
-	return newBornSlave.seal;
+	//console.dir(this.list);
+	return newBornSlave;
 };
 //kill the elder slave, free memory in order to get job cycled
 //@type: function
 //@param: seal, generated at the borning state of a baby slave
 slaves.killTheElderSlave = function(seal) {
+	//console.log(this.list);
 	var killed = delete this.list[seal];
 	return killed;
 };
@@ -94,6 +102,7 @@ assert.notEqual(slave1.seal, null);
 var slave2 = new Slave();
 assert.notEqual(slave1.seal, slaves.seal);
 
-var babySeal = slaves.bornABabySlave(100);
-var killed = slaves.killTheElderSlave(babySeal);
+var babySlave = slaves.bornABabySlave(100);
+babySlave.workWork(job);
+var killed = slaves.killTheElderSlave(babySlave.seal);
 assert.strictEqual(killed, true);
