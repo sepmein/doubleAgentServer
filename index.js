@@ -1,10 +1,14 @@
-var http = require('http');
+var Crawler = require('./crawler');
+var db = require('./db');
 
-http.createServer(function(req, res){
-	res.end('hello world');
-}).listen(8000);
+function generateTasks() {
+    return Math.floor(Math.random() * 1000000);
+}
 
+for(var i = 10; i > 0; i--) {
+   console.log('bla');
+}
 
-//what is it?
-//api based
-//when a http request come from somewhere the server got do something or don't do something
+Crawler.makeRequest(generateTasks(), function (err, data) {
+    db(data);
+});
