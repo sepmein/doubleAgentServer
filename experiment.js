@@ -17,11 +17,11 @@ master.on('taskFinished', function(seal, produce) {
 	if (produce <= 10000) {
 		console.log('[called] master.on.taskFinished');
 		//elder's produce is new born's since
-		var since = produce;
+		//var since = produce;
 		//delete the elder one, free memory
 		slaves.killTheElderSlave(seal);
 		//create a new slave, 依赖slaves
-		var newSlave = slaves.bornABabySlave(since);
+		var newSlave = slaves.bornABabySlave();
 		//assign him a job
 		newSlave.workWork();
 	} else {
@@ -72,7 +72,7 @@ Slave.prototype.workWork = function() {
 	self.produce = self.since + 1;
 	console.log('I\'m ' + self.seal + ', and the produce of my work is ' + self.produce);
 	console.log(process.memoryUsage());
-	master.emit('taskFinished', this.seal, this.produce);
+	//master.emit('taskFinished', this.seal, this.produce);
 
 	//self.sendMessageToMaster();
 };

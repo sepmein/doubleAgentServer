@@ -1,14 +1,31 @@
 var Crawler = require('./crawler');
 var db = require('./db');
+var async = require('async');
 
 function generateTasks() {
     return Math.floor(Math.random() * 1000000);
 }
 
-for(var i = 10; i > 0; i--) {
-   console.log('bla');
+function fnn(){
+    Crawler.makeRequest(generateTasks(), function (err, data, lastId) {
+        db(lastId);
+    });
 }
 
-Crawler.makeRequest(generateTasks(), function (err, data) {
-    db(data);
+var stackTracer = 0;
+function fn(next){
+    stackTracer ++;
+    console.log(stackTracer);
+    next();
+}
+
+function forever(fn, callback) {
+    function next() {
+        fn(next);
+    }
+    next();
+}
+
+forever(fn, function(err){
+    console.log(err);
 });
