@@ -5,7 +5,9 @@ var githubToken = require('.././config').githubToken;
 var Crawler = Object.create(null);
 
 Crawler.makeRequest = function makeRequest(arg, callback) {
-    var option = (function (argument) {
+    console.log('Crawler.makeRequest called~ the arg is ' + arg);
+    console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + 'a function');
+    var option = (function(argument) {
         var querySince;
         if (argument > 0) {
             querySince = argument;
@@ -25,39 +27,45 @@ Crawler.makeRequest = function makeRequest(arg, callback) {
         }
     })(arg);
 
-    request(option, function (error, response, body) {
+    request(option, function(error, response, body) {
         var results = JSON.parse(body);
         var lastId = results[results.length - 1].id;
         //console.dir(response);
         //console.log(lastId);
-        callback(error, results, lastId);
+        if (results.length > 0) {
+            console.log(results);
+            callback(error, results);
+        } else {
+            //todo handle the error
+            console.log('no results returned');
+        }
+
     });
 
 };
 
 
 //profiling
-Crawler.getGithubRepositories = function () {
+Crawler.getGithubRepositories = function() {
 
     var startingTime = new Date();
     var counter = 0;
     async.waterfall(
-        [function (callback) {
-            makeRequest(null, callback);
-        }, function (arg, callback) {
-            makeRequest(arg, callback);
-        }, function (arg, callback) {
-            makeRequest(arg, callback);
-        }, function (arg, callback) {
-            makeRequest(arg, callback);
-        }, function (arg, callback) {
-            makeRequest(arg, callback);
-        }
-        ], function (err, result) {
-            var endingTime = new Date();
-            var processingTime = (endingTime - startingTime) / 1000;
-            console.log('处理总共用时 : ' + processingTime + '秒');
-        });
+    [function(callback) {
+        makeRequest(null, callback);
+    }, function(arg, callback) {
+        makeRequest(arg, callback);
+    }, function(arg, callback) {
+        makeRequest(arg, callback);
+    }, function(arg, callback) {
+        makeRequest(arg, callback);
+    }, function(arg, callback) {
+        makeRequest(arg, callback);
+    }], function(err, result) {
+        var endingTime = new Date();
+        var processingTime = (endingTime - startingTime) / 1000;
+        console.log('处理总共用时 : ' + processingTime + '秒');
+    });
 };
 
 module.exports = Crawler;

@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "latest",
     "mongoose": "latest",
+    "mongodb": "latest",
     "request": "latest",
     "async": "latest"
   },
@@ -12,7 +13,7 @@
   "description": "backend for doubleAgent",
   "main": "index.js",
   "devDependencies": {
-	  "mocha":"latest"
+    "mocha": "latest"
   },
   "scripts": {
     "test": "mocha"
