@@ -3,6 +3,10 @@
 var t9Util = require('./util');
 var inherits = require('util').inherits;
 var async = require('async');
+
+
+// the limitation is 720ms/request
+var REQUESTINTERVAL = 720;
 // create a task, run that task, get a result from that task, create a task based on that
 
 //when task finished deliver the data to the controller and db
@@ -31,6 +35,14 @@ master.on('taskFinished', function(seal, produce) {
 master.on('taskUnfinished', function(seal) {
 
 });
+//master work flow:
+//just assign the work, not knowing about the consumption of the system
+//
+master.start = function() {
+	setInterval(function() {
+		slaves.bornABabySlave().workWork()
+	}, REQUESTINTERVAL);
+}
 
 //data level of jobs
 var job = function(content, whenDone) {
@@ -64,17 +76,20 @@ Slave.prototype.sendMessageToMaster = function() {
 	}
 };
 Slave.prototype.workWork = function() {
-	console.log('[called] slave.work');
 	var self = this;
 
-	//完成工作后，获得工作成果，并向master发送一条消息
-	//call the job fn, deliver the Slave's since
-	self.produce = self.since + 1;
-	console.log('I\'m ' + self.seal + ', and the produce of my work is ' + self.produce);
-	console.log(process.memoryUsage());
-	//master.emit('taskFinished', this.seal, this.produce);
+	setTimeout(function() {
+		console.log('[called] slave.work');
 
-	//self.sendMessageToMaster();
+		//完成工作后，获得工作成果，并向master发送一条消息
+		//call the job fn, deliver the Slave's since
+		self.produce = self.since + 1;
+		console.log('I\'m ' + self.seal + ', and the produce of my work is ' + self.produce);
+		console.log(process.memoryUsage());
+		//master.emit('taskFinished', this.seal, this.produce);
+
+		//self.sendMessageToMaster();
+	}, Math.floor(Math.random() * 10000))
 };
 //inherits(Slave, EventEmitter);
 
@@ -117,3 +132,5 @@ slaves.killTheElderSlave = function(seal) {
 //babySlave.workWork();
 //var killed = slaves.killTheElderSlave(babySlave.seal);
 //assert.strictEqual(killed, true);
+//
+master.start(4);
