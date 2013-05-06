@@ -13,15 +13,15 @@ var REQUESTINTERVAL = 720;
 //send a message to the controller
 //controller delete task
 
-var experiment = Object.create(null);
+var controlFlow = Object.create(null);
 
 //master controller
 var EventEmitter = require('events').EventEmitter;
-experiment.master = Object.create(EventEmitter.prototype);
+controlFlow.master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
-experiment.master.on('taskFinished', function(seal, produce) {
+controlFlow.master.on('taskFinished', function(seal, produce) {
 	if (produce <= 10000) {
-		console.log('[called] master.on.taskFinished');
+		//console.log('[called] master.on.taskFinished');
 		//elder's produce is new born's since
 		//var since = produce;
 		//delete the elder one, free memory
@@ -34,13 +34,13 @@ experiment.master.on('taskFinished', function(seal, produce) {
 
 	}
 });
-experiment.master.on('taskUnfinished', function(seal) {
+controlFlow.master.on('taskUnfinished', function(seal) {
 
 });
 //master work flow:
 //just assign the work, not knowing about the consumption of the system
 //
-experiment.master.start = function(fn, cb) {
+controlFlow.master.start = function(fn, cb) {
 	setInterval(function() {
 		slaves.bornABabySlave().workWork(fn, cb);
 	}, REQUESTINTERVAL);
@@ -51,7 +51,7 @@ var job = function(content, whenDone) {
 	//just for test
 	var produce = 0;
 	produce++;
-	console.log(produce);
+	//console.log(produce);
 	whenDone(produce);
 };
 
@@ -69,11 +69,11 @@ var Slave = function Slave(since) {
 //when task is finished send a message to master 
 //当任务完成时，向主人发送一条消息
 Slave.prototype.sendMessageToMaster = function() {
-	console.log('[called] slave.sendMessageToMaster');
+	//console.log('[called] slave.sendMessageToMaster');
 	if (this.produce !== null) {
 		master.emit('taskFinished', this.seal, this.produce);
-		console.log(this.seal);
-		console.log('blabla');
+		//console.log(this.seal);
+		//console.log('blabla');
 	} else {
 		master.emit('taskUnfinished', this.seal);
 	}
@@ -81,21 +81,10 @@ Slave.prototype.sendMessageToMaster = function() {
 Slave.prototype.workWork = function(fn, cb) {
 	var self = this;
 	if (typeof fn === 'function') {
-		console.log('working with master\s jobs and the since is ' + self.since);
+		//console.log('working with master\s jobs and the since is ' + self.since);
 		fn(self.since, cb);
 	} else {
-		setTimeout(function() {
-			console.log('[called] slave.work');
-
-			//完成工作后，获得工作成果，并向master发送一条消息
-			//call the job fn, deliver the Slave's since
-			self.produce = self.since + 1;
-			console.log('I\'m ' + self.seal + ', and the produce of my work is ' + self.produce);
-			console.log(process.memoryUsage());
-			//master.emit('taskFinished', this.seal, this.produce);
-
-			//self.sendMessageToMaster();
-		}, Math.floor(Math.random() * 10000))
+		console.log('from slave: nothing todo');
 	}
 
 };
@@ -110,7 +99,7 @@ slaves.list = {};
 //@type: function
 //@param: Since (type:num) - github api params get repositories from 'since'
 slaves.bornABabySlave = function(since) {
-	console.log('[called] bornABabySlave');
+	//console.log('[called] bornABabySlave');
 	var newBornSlave = new Slave(since);
 	this.list[newBornSlave.seal] = newBornSlave;
 	//console.dir(this.list);
@@ -120,13 +109,13 @@ slaves.bornABabySlave = function(since) {
 //@type: function
 //@param: seal, generated at the borning state of a baby slave
 slaves.killTheElderSlave = function(seal) {
-	console.log('[called] killTheElderSlave');
+	//console.log('[called] killTheElderSlave');
 	//console.log(this.list);
 	var killed = delete this.list[seal];
 	return killed;
 };
 
-module.exports = experiment;
+module.exports = controlFlow;
 
 //test codes
 //var assert = require('assert');

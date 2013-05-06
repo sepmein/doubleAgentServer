@@ -1,6 +1,6 @@
-var Crawler = require('./crawler');
-var db = require('./db/native');
-var experiment = require('./experiment');
+var crawler = require('./crawler');
+var db = require('./db');
+var controlFlow = require('./controlFlow');
 var async = require('async');
 
 // function generateTasks() {
@@ -8,7 +8,7 @@ var async = require('async');
 // }
 
 // function fnn(){
-//     Crawler.makeRequest(generateTasks(), function (err, data, lastId) {
+//     crawler.makeRequest(generateTasks(), function (err, data, lastId) {
 //         db(lastId);
 //     });
 // }
@@ -31,12 +31,13 @@ var async = require('async');
 //     console.log(err);
 // });
 
-var master = experiment.master;
+var master = controlFlow.master;
 
 db.connect(function(err, database) {
+    console.log('start crawling!');
     if (!err) {
-        master.start(Crawler.makeRequest, function(err, results) {
-            console.log('request made');
+        master.start(crawler.makeRequest, function(err, results) {
+            //console.log('request made');
             for (var i = results.length - 1; i >= 0; i--) {
                 db.insert(database, results[i], function(err, results) {
                     if (err) {

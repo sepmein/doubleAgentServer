@@ -1,45 +1,59 @@
-// mongodb storage
+var mongodb = require('mongodb');
+var async = require('async');
 
-var mongoose = require('mongoose');
+//console.log(mongodb);
 
-mongoose.connect('mongodb://localhost/test');
+var mongoClient = mongodb.MongoClient;
 
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback() {
-	console.log('mongodb connected! Wohh ha!');
-});
+var db = Object.create(null);
 
 
-var kittySchema = mongoose.Schema({
-});
+db.connect = function(callback) {
+	//connection
+	mongoClient.connect('mongodb://localhost/test', function(err, db) {
+		console.log('Connected');
+		callback(err, db);
+	});
 
-kittySchema.methods.speak = function() {
-	var greeting = this.name ? "Meow name is " + this.name : "I don't have a name";
+};
 
-	console.log(greeting);
-}
+db.insert = function(db, obj, cb) {
 
-
-var Kitten = mongoose.model('Kitten', kittySchema);
-
-
-var silence = new Kitten({
-	name: 'Silence'
-});
-
-silence.speak();
-
-
-var fluffy = new Kitten({name: ' fluffy_02'});
-fluffy.speak();
-
-fluffy.save(function(err, fluffy){
-	if (err) {
-
-	} 
-	console.log(fluffy);
+	//wrap around async
+	async.waterfall([function(callback) {
+		//collection
+		if (db !== null) {
+			db.collection('test', function(err, collection) {
+				callback(err, collection);
+			});
+		} else {
+			callback(new Error('mongodb no dbs'));
+		}
 
 
-})
+	}, function(collection, callback) {
+		//insert
+		if (obj.id !== null && typeof obj.name) {
+			collection.insert(obj, {
+				w: 1
+			}, function(err, result) {
+				callback(err, result);
+			});
+		} else {
+			callback(new Error('some thing wrong about the obj'));
+		}
+
+	}
+
+	], function(err, result) {
+		//传递结果
+		cb(err, result);
+	}
+
+	//console.log('waterfall is done');
+
+	);
+
+};
+
+module.exports = db;
