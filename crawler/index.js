@@ -6,7 +6,7 @@ var Crawler = Object.create(null);
 
 Crawler.makeRequest = function makeRequest(arg, callback) {
     console.log('Crawler.makeRequest called~ the arg is ' + arg);
-    console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + 'a function');
+    console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
     var option = (function(argument) {
         var querySince;
         if (argument > 0) {
@@ -29,7 +29,7 @@ Crawler.makeRequest = function makeRequest(arg, callback) {
 
     request(option, function(error, response, body) {
         var results = JSON.parse(body);
-        var lastId = results[results.length - 1].id;
+        //var lastId = results[results.length - 1].id;
         //console.dir(response);
         //console.log(lastId);
         if (results.length > 0) {

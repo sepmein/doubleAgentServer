@@ -32,15 +32,15 @@ db.insert = function(db, obj, cb) {
 
 	}, function(collection, callback) {
 		//insert
-		var something = {
-			hello: 'world'
-		};
-		console.log(something);
-		collection.insert(something, {
-			w: 1
-		}, function(err, result) {
-			callback(err, result);
-		});
+		if (obj.id !== null && typeof obj.name) {
+			collection.insert(obj, {
+				w: 1
+			}, function(err, result) {
+				callback(err, result);
+			});
+		} else {
+			callback(new Error('some thing wrong about the obj'));
+		}
 
 	}
 
