@@ -32,9 +32,9 @@ crawler.makeRequest = function makeRequest(arg, callback) {
             var results = JSON.parse(body);
         }
         //var lastId = results[results.length - 1].id;
-        //console.dir(response);
+        //console.dir(response.headers);
         //console.log(lastId);
-        if (results.length > 0) {
+        if (results.length) {
             //console.log(results);
             callback(error, results);
         } else {

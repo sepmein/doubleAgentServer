@@ -1,12 +1,12 @@
 'use strict';
 
-var t9Util = require('./util');
+var t9Util = require('.././util');
 var inherits = require('util').inherits;
 var async = require('async');
 
 
 // the limitation is 720ms/request
-var REQUESTINTERVAL = 720;
+var REQUESTINTERVAL = 730;
 // create a task, run that task, get a result from that task, create a task based on that
 
 //when task finished deliver the data to the controller and db

@@ -10,7 +10,7 @@ var db = Object.create(null);
 
 db.connect = function(callback) {
 	//connection
-	mongoClient.connect('mongodb://localhost/test', function(err, db) {
+	mongoClient.connect('mongodb://localhost/doubleAgent', function(err, db) {
 		console.log('Connected');
 		callback(err, db);
 	});
@@ -23,7 +23,7 @@ db.insert = function(db, obj, cb) {
 	async.waterfall([function(callback) {
 		//collection
 		if (db !== null) {
-			db.collection('test', function(err, collection) {
+			db.collection('repositories', function(err, collection) {
 				callback(err, collection);
 			});
 		} else {
