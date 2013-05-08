@@ -34,11 +34,13 @@ crawler.makeRequest = function makeRequest(arg, callback) {
         //var lastId = results[results.length - 1].id;
         //console.dir(response.headers);
         //console.log(lastId);
-        if (results.length) {
+        if (Array.isArray(results)) {
             //console.log(results);
             callback(error, results);
         } else {
             //todo handle the error
+            //console.log(response);
+            //console.log(error);
             console.log('no results returned');
         }
 

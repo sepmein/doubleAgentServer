@@ -63,7 +63,7 @@ var Slave = function Slave(since) {
 	//EventEmitter.call(this);
 	this.seal = t9Util.generateRandom(20);
 	//todo 随机生成since，根据repository总量
-	this.since = since || Math.floor(Math.random() * 11000000);
+	this.since = since || Math.floor(Math.random() * 10000000);
 	this.produce = null;
 };
 //when task is finished send a message to master 
