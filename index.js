@@ -38,8 +38,12 @@ db.connect(function(err, database) {
     if (!err) {
         master.start(crawler.makeRequest, function(err, results) {
             //console.log('request made');
-            if (err) {console.log(err);}
+            if (err) {
+                console.log(err);
+            }
             for (var i = results.length - 1; i >= 0; i--) {
+                results[i]._id = results[i].id;
+                delete results[i].id;
                 db.insert(database, results[i], function(err, results) {
                     if (err) {
                         throw err;
