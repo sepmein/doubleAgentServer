@@ -40,15 +40,29 @@ controlFlow.master.on('taskUnfinished', function (seal) {
 //master work flow:
 //just assign the work, not knowing about the consumption of the system
 //
-controlFlow.master.start = function (fn, cb) {
-    setInterval(function () {
-        if (typeof fn === 'function') {
-            //console.log('working with master\s jobs and the since is ' + self.since);
-            fn(Math.floor(Math.random() * 10000000), cb);
-        } else {
-            console.log('from slave: nothing todo');
-        }
-    }, REQUESTINTERVAL);
+controlFlow.master.start = function alwaysWorking(fn, cb) {
+    setImmediate(function () {
+        setTimeout(function () {
+            if (typeof fn === 'function') {
+                //console.log('working with master\s jobs and the since is ' + self.since);
+                fn(Math.floor(Math.random() * 10000000), cb);
+            } else {
+                console.log('from slave: nothing todo');
+            }
+            alwaysWorking(fn, cb);
+        }, REQUESTINTERVAL);
+
+    });
+    /*
+     setInterval(function () {
+     if (typeof fn === 'function') {
+     //console.log('working with master\s jobs and the since is ' + self.since);
+     fn(Math.floor(Math.random() * 10000000), cb);
+     } else {
+     console.log('from slave: nothing todo');
+     }
+     }, REQUESTINTERVAL);
+     */
 };
 
 //data level of jobs
@@ -76,11 +90,11 @@ var Slave = function Slave(since) {
 Slave.prototype.sendMessageToMaster = function () {
     //console.log('[called] slave.sendMessageToMaster');
     if (this.produce !== null) {
-        master.emit('taskFinished', this.seal, this.produce);
+        controlFlow.master.emit('taskFinished', this.seal, this.produce);
         //console.log(this.seal);
         //console.log('blabla');
     } else {
-        master.emit('taskUnfinished', this.seal);
+        controlFlow.master.emit('taskUnfinished', this.seal);
     }
 };
 Slave.prototype.workWork = function (fn, cb) {

@@ -41,6 +41,7 @@ db.save = function (db, obj, cb) {
                 else {
                     //todo
                     //save the result to status collection
+                    //console.log('saved');
                 }
             });
         } else {

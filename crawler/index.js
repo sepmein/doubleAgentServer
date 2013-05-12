@@ -5,8 +5,8 @@ var githubToken = require('.././config').githubToken;
 var crawler = Object.create(null);
 
 crawler.makeRequest = function makeRequest(arg, callback) {
-    //console.log('crawler.makeRequest called~ the arg is ' + arg);
-    //console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
+//    console.log('crawler.makeRequest called~ the arg is ' + arg);
+//    console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
     var option = (function (argument) {
         var querySince;
         if (argument > 0) {

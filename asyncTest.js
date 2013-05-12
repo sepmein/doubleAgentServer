@@ -20,7 +20,7 @@ for (var i = 1000; i > 0; i--) {
         memoryUsage.push(process.memoryUsage().rss);
     }
     //console.log(taskList.length);
-    console.log(memoryUsage[memoryUsage.length -1]);
+    console.log(memoryUsage[memoryUsage.length - 1]);
     async.waterfall(taskList, function (err, callback) {
         if (err) {
             console.log(err);
@@ -30,7 +30,5 @@ for (var i = 1000; i > 0; i--) {
             //					if (err) throw err;
             //console.log('It\'s saved!');
         }
-        ;
     });
 }
-;
