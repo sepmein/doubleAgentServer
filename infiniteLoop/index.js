@@ -11,6 +11,8 @@
 
 var count = 1000000000000;
 
+var loops = Object.create(null);
+
 function forLoop() {
     for (; ;) {
         console.log(count--);
@@ -36,14 +38,23 @@ var fn = function setImmediateLoop() {
 //fn();
 
 
-function withoutInterval() {
-    setImmediate(function () {
-        console.log(count--);
-        withoutInterval();
-    });
-}
+loops.forever = function withoutInterval() {
+    // console.dir(arguments);
+    var args = arguments;
+    console.log(arguments);
+    var argsArray = Array.prototype.slice.call(arguments);
+    var fns = argsArray[0];
+    var fnsArguments = argsArray.slice(1);
+    var that = this;
+    if (typeof fns === 'function') {
+        setImmediate(function () {
+        fns.apply(that, fnsArguments);
+    });    
+    }
+    
+};
 
-withoutInterval();
+// withoutInterval();
 
 function interval() {
     setInterval(function () {
@@ -52,3 +63,13 @@ function interval() {
 }
 
 //interval();
+
+function countMinusMinus(){
+    console.log(count--);
+}
+
+function countPlusPlus(n,m){
+    console.log(n+m);
+}
+
+loops.forever(countPlusPlus,1,2);
