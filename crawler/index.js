@@ -2,7 +2,9 @@ var request = require('request');
 var async = require('async');
 var githubToken = require('.././config').githubToken;
 
-var getRepositoriesSeries = function getRepositoriesSeries(arg, callback) {
+var Crawler = Object.create(null);
+
+function makeRequest(arg, callback) {
     var option = (function (argument) {
         var querySince;
         if (argument > 0) {
@@ -34,25 +36,27 @@ var getRepositoriesSeries = function getRepositoriesSeries(arg, callback) {
 
 
 //profiling
-(function () {
+Crawler.getGithubRepositories = function () {
 
     var   startingTime = new Date();
     var counter = 0;
     async.waterfall(
         [function (callback) {
-            getRepositoriesSeries(null, callback);
+            makeRequest(null, callback);
         }, function (arg, callback) {
-            getRepositoriesSeries(arg, callback);
+            makeRequest(arg, callback);
         }, function (arg, callback) {
-            getRepositoriesSeries(arg, callback);
+            makeRequest(arg, callback);
         }, function (arg, callback) {
-            getRepositoriesSeries(arg, callback);
+            makeRequest(arg, callback);
         }, function (arg, callback) {
-            getRepositoriesSeries(arg, callback);
+            makeRequest(arg, callback);
         }
         ], function (err, result) {
             var endingTime = new Date();
             var processingTime = (endingTime - startingTime) / 1000;
             console.log('处理总共用时 : ' + processingTime + '秒');
         });
-})();
+};
+
+module.exports = Crawler;
