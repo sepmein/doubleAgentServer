@@ -48,10 +48,10 @@ loops.forever = function withoutInterval() {
     var that = this;
     if (typeof fns === 'function') {
         setImmediate(function () {
-        fns.apply(that, fnsArguments);
-    });    
+            fns.apply(that, fnsArguments);
+        });
     }
-    
+
 };
 
 // withoutInterval();
@@ -64,12 +64,12 @@ function interval() {
 
 //interval();
 
-function countMinusMinus(){
+function countMinusMinus() {
     console.log(count--);
 }
 
-function countPlusPlus(n,m){
-    console.log(n+m);
+function countPlusPlus(n, m) {
+    console.log(n + m);
 }
 
-loops.forever(countPlusPlus,1,2);
+loops.forever(countPlusPlus, 1, 2);
