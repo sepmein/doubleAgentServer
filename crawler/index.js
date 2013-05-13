@@ -1,31 +1,13 @@
 var request = require('request');
 var async = require('async');
-var githubToken = require('.././config').githubToken;
+var targetGenerator = require('./targetGenerator');
 
 var crawler = Object.create(null);
-
+//params arg { to: urlPartial, qs:queryString }
 crawler.makeRequest = function makeRequest(arg, callback) {
 // console.log('crawler.makeRequest called~ the arg is ' + arg);
 // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
-    var option = (function (argument) {
-        var querySince;
-        if (argument > 0) {
-            querySince = argument;
-        } else {
-            querySince = 0;
-        }
-        return {
-            url: "https://api.github.com/repositories",
-            qs: {
-                since: argument,
-                'client_id': githubToken.client_id,
-                'client_secret': githubToken.client_secret
-            },
-            headers: {
-                "User-Agent": "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31"
-            }
-        }
-    })(arg);
+    var option = targetGenerator(arg.to, arg.qs, arg.token);
 
     request(option, function (error, response, body) {
         if (typeof body === 'string' && body[0] === '[') {
@@ -64,13 +46,13 @@ crawler.getGithubRepositories = function () {
         [function (callback) {
             makeRequest(null, callback);
         }, function (arg, callback) {
-            makeRequest(arg, callback);
+            makeRequest({to: arg}, callback);
         }, function (arg, callback) {
-            makeRequest(arg, callback);
+            makeRequest({to: arg}, callback);
         }, function (arg, callback) {
-            makeRequest(arg, callback);
+            makeRequest({to: arg}, callback);
         }, function (arg, callback) {
-            makeRequest(arg, callback);
+            makeRequest({to: arg}, callback);
         }], function (err, result) {
             var endingTime = new Date();
             var processingTime = (endingTime - startingTime) / 1000;

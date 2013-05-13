@@ -30,4 +30,11 @@ util.generateRandom = function (length) {
     return result;
 };
 
+util.extend = function (o, p) {
+    for (var prop in p) {
+        o[prop] = p[prop];
+    }
+    return o;
+};
+
 module.exports = util;
