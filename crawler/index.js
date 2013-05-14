@@ -22,14 +22,15 @@ crawler.makeRequest = function makeRequest(arg, callback) {
         //var lastId = results[results.length - 1].id;
         //console.dir(response.headers);
         //console.log(lastId);
-        if (Array.isArray(results)) {
+        if (Array.isArray(results) && results.length > 0) {
             //console.log(results);
-            callback(error, results);
+            callback(error, results, response);
         } else {
             //todo handle the error
             //console.log(response);
             //console.log(error);
-            console.log('no results returned');
+            //console.dir(response.headers);
+            //console.dir(results);
         }
 
     });
@@ -38,27 +39,27 @@ crawler.makeRequest = function makeRequest(arg, callback) {
 
 
 /*//profiling
-crawler.getGithubRepositories = function () {
+ crawler.getGithubRepositories = function () {
 
-    var startingTime = new Date();
-    var counter = 0;
-    async.waterfall(
-        [function (callback) {
-            makeRequest(null, callback);
-        }, function (arg, callback) {
-            makeRequest({to: arg}, callback);
-        }, function (arg, callback) {
-            makeRequest({to: arg}, callback);
-        }, function (arg, callback) {
-            makeRequest({to: arg}, callback);
-        }, function (arg, callback) {
-            makeRequest({to: arg}, callback);
-        }], function (err, result) {
-            var endingTime = new Date();
-            var processingTime = (endingTime - startingTime) / 1000;
-            console.log('处理总共用时 : ' + processingTime + '秒');
-        });
-};*/
+ var startingTime = new Date();
+ var counter = 0;
+ async.waterfall(
+ [function (callback) {
+ makeRequest(null, callback);
+ }, function (arg, callback) {
+ makeRequest({to: arg}, callback);
+ }, function (arg, callback) {
+ makeRequest({to: arg}, callback);
+ }, function (arg, callback) {
+ makeRequest({to: arg}, callback);
+ }, function (arg, callback) {
+ makeRequest({to: arg}, callback);
+ }], function (err, result) {
+ var endingTime = new Date();
+ var processingTime = (endingTime - startingTime) / 1000;
+ console.log('处理总共用时 : ' + processingTime + '秒');
+ });
+ };*/
 
 module.exports = crawler;
 

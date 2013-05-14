@@ -42,7 +42,7 @@ function generate(rcp, qs, whichToken) {
         ts = new TargetUrl(rcp, qs || {since: Math.floor(Math.random() * TOTALESTIMATE[rcp])}, whichToken);
         return ts.generate();
     } else {
-        ts = new TargetUrl(rcp, qs, whichToken).generate();
+        ts = new TargetUrl(rcp, qs, whichToken);
         return ts.generate();
     }
 }

@@ -46,12 +46,59 @@ function crawlGithub(database, to, token) {
     });
 }
 
-db.connect(function (err, db) {
+db.connect(function (err, database) {
     console.log('start crawling!');
     if (!err) {
-        crawlGithub(db, 'repositories', 0);
-        crawlGithub(db, 'users', 1);
+        master.start(crawler.makeRequest, {to: 'repositories', token: 0}, function (err, results) {
+            //console.log('request made');
+            if (err) {
+                console.log(err);
+            }
+            for (var i = results.length - 1; i >= 0; i--) {
+                results[i]._id = results[i].id;
+                delete results[i].id;
+                db.save(database, 'repositories', results[i], function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
+            }
+        });
+        master.start(
+            crawler.makeRequest,
+            {
+                to: 'users',
+                token: 1
+            },
+            function (err, results) {
+                //console.log('request made');
+                if (err) {
+                    console.log(err);
+                }
+                for (var i = results.length - 1; i >= 0; i--) {
+                    results[i]._id = results[i].id;
+                    delete results[i].id;
+                    db.save(database, 'users', results[i], function (err) {
+                        if (err) {
+                            throw err;
+                        }
+                    });
 
+                    crawler.makeRequest(
+                        {
+                            to: 'users/' + results[i].login + '/followers',
+                            qs: {
+                                per_page: 1
+                            },
+                            token: 2
+                        }
+                        , function (err, results, response) {
+                            console.log('made some results');
+                            console.log(results);
+                            console.dir(response.headers);
+                        });
+                }
+            });
     } else {
         throw err;
     }
