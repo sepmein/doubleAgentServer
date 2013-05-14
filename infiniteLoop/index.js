@@ -49,6 +49,7 @@ loops.forever = function withoutInterval() {
     if (typeof fns === 'function') {
         setImmediate(function () {
         fns.apply(that, fnsArguments);
+        withoutInterval.apply(that, fns, fnsArguments);
     });    
     }
     
