@@ -37,7 +37,7 @@ crawler.makeRequest = function makeRequest(arg, callback) {
 };
 
 
-//profiling
+/*//profiling
 crawler.getGithubRepositories = function () {
 
     var startingTime = new Date();
@@ -58,7 +58,7 @@ crawler.getGithubRepositories = function () {
             var processingTime = (endingTime - startingTime) / 1000;
             console.log('处理总共用时 : ' + processingTime + '秒');
         });
-};
+};*/
 
 module.exports = crawler;
 

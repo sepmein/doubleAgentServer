@@ -11,7 +11,7 @@ var TOTALESTIMATE = {
 var TargetUrl = function (urlPartial, queryString, whichToken) {
     this.urlPartial = urlPartial;
     this.queryString = queryString;
-    this.token = whichToken ? secret.githubToken : secret.emilyToken;
+    this.token = secret[whichToken];
 };
 
 TargetUrl.prototype.generate = function () {
