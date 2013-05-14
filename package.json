@@ -1,33 +1,33 @@
 {
-  "name": "doubleAgentServer",
-  "version": "0.0.0",
-  "dependencies": {
-    "express": "latest",
-    "mongoose": "latest",
-    "mongodb": "latest",
-    "request": "latest",
-    "async": "latest"
-  },
-  "readmeFilename": "README.md",
-  "gitHead": "74592ee645694629f72faa3504a1b229a4bbf56b",
-  "description": "backend for doubleAgent",
-  "main": "index.js",
-  "devDependencies": {
-    "mocha": "latest"
-  },
-  "scripts": {
-    "test": "mocha"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/sepmein/doubleAgentServer.git"
-  },
-  "keywords": [
-    "crawler",
-    "github",
-    "server",
-    "nodejs"
-  ],
-  "author": "Spencer Z",
-  "license": "BSD"
+    "name": "doubleAgentServer",
+    "version": "0.0.0",
+    "dependencies": {
+        "express": "latest",
+        "mongoose": "latest",
+        "mongodb": "latest",
+        "request": "latest",
+        "async": "latest"
+    },
+    "readmeFilename": "README.md",
+    "gitHead": "74592ee645694629f72faa3504a1b229a4bbf56b",
+    "description": "backend for doubleAgent",
+    "main": "index.js",
+    "devDependencies": {
+        "mocha": "latest"
+    },
+    "scripts": {
+        "test": "mocha"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/sepmein/doubleAgentServer.git"
+    },
+    "keywords": [
+        "crawler",
+        "github",
+        "server",
+        "nodejs"
+    ],
+    "author": "Spencer Z",
+    "license": "BSD"
 }

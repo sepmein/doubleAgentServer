@@ -51,8 +51,9 @@ loops.forever = function withoutInterval() {
         fns.apply(that, fnsArguments);
         withoutInterval.apply(that, fns, fnsArguments);
     });    
+
     }
-    
+
 };
 
 // withoutInterval();
@@ -65,12 +66,12 @@ function interval() {
 
 //interval();
 
-function countMinusMinus(){
+function countMinusMinus() {
     console.log(count--);
 }
 
-function countPlusPlus(n,m){
-    console.log(n+m);
+function countPlusPlus(n, m) {
+    console.log(n + m);
 }
 
-loops.forever(countPlusPlus,1,2);
+loops.forever(countPlusPlus, 1, 2);

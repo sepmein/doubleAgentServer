@@ -40,16 +40,16 @@ controlFlow.master.on('taskUnfinished', function (seal) {
 //master work flow:
 //just assign the work, not knowing about the consumption of the system
 //
-controlFlow.master.start = function alwaysWorking(fn, cb) {
+controlFlow.master.start = function alwaysWorking(fn, toUrl, cb) {
     setImmediate(function () {
         setTimeout(function () {
             if (typeof fn === 'function') {
                 //console.log('working with master\s jobs and the since is ' + self.since);
-                fn(Math.floor(Math.random() * 10000000), cb);
+                fn(toUrl, cb);
             } else {
                 console.log('from slave: nothing todo');
             }
-            alwaysWorking(fn, cb);
+            alwaysWorking(fn, toUrl, cb);
         }, REQUESTINTERVAL);
 
     });

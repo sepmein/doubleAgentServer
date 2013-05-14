@@ -17,13 +17,13 @@ db.connect = function (callback) {
 
 };
 
-db.save = function (db, obj, cb) {
+db.save = function (db, coll, obj, cb) {
 
     //wrap around async
     async.waterfall([function (callback) {
         //collection
         if (db !== null) {
-            db.collection('repositories', function (err, collection) {
+            db.collection(coll, function (err, collection) {
                 callback(err, collection);
             });
         } else {

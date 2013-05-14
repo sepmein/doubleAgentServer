@@ -3,26 +3,39 @@ var db = require('./db');
 var controlFlow = require('./controlFlow');
 
 var master = controlFlow.master;
+// todo make this chunk of code more elegant
+// standard flow
+// connect to db
+// choose a collection
+// make request
+// save the results to collection when done
+// params: database, collection, request url(generator),
+function crawlGithub(database, to, token) {
+    master.start(crawler.makeRequest, {to: to, token: token}, function (err, results) {
+        //console.log('request made');
+        if (err) {
+            console.log(err);
+        }
+        for (var i = results.length - 1; i >= 0; i--) {
+            results[i]._id = results[i].id;
+            delete results[i].id;
+            db.save(database, to, results[i], function (err) {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
+}
 
-db.connect(function (err, database) {
+db.connect(function (err, db) {
     console.log('start crawling!');
     if (!err) {
-        master.start(crawler.makeRequest, function (err, results) {
-            //console.log('request made');
-            if (err) {
-                console.log(err);
-            }
-            for (var i = results.length - 1; i >= 0; i--) {
-                results[i]._id = results[i].id;
-                delete results[i].id;
-                db.save(database, results[i], function (err) {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
-        });
+//        crawlGithub(db, 'repositories', 0);
+        crawlGithub(db, 'users', 1);
+
     } else {
         throw err;
     }
 });
+
