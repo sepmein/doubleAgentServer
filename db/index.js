@@ -7,7 +7,6 @@ var mongoClient = mongodb.MongoClient;
 
 var db = Object.create(null);
 
-
 db.connect = function (callback) {
     //connection
     mongoClient.connect('mongodb://localhost/doubleAgent', function (err, db) {
@@ -15,6 +14,37 @@ db.connect = function (callback) {
         callback(err, db);
     });
 
+};
+
+db.checkSaved = function (ee, db, coll, obj, cb) {
+
+    async.waterfall([
+        function (callback) {
+
+            if (db !== null) {
+                db.collection(coll, function (err, collection) {
+                    callback(err, collection);
+                })
+            } else {
+                callback(new Error('mongodb no dbs'));
+            }
+
+        }, function (collection, callback) {
+            collection.findOne({"_id": obj._id}, function (err, result) {
+                if (err) {
+                    callback(err);
+                } else if (result !== null) {
+                    callback(null, {
+                        ok: 1
+                    });
+                } else callback(null, {
+                    ok: 0
+                });
+            });
+        }
+    ], function (err, result) {
+        if (err) ee.emit('error', err); else cb(result);
+    });
 };
 
 db.save = function (db, coll, obj, cb) {
@@ -47,9 +77,7 @@ db.save = function (db, coll, obj, cb) {
         } else {
             callback(new Error('some thing wrong about the obj'));
         }
-
     }
-
     ], function (err, result) {
             //传递结果
             cb(err, result);

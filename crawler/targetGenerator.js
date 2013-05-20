@@ -1,3 +1,4 @@
+var db = require('.././db');
 var secret = require('.././config');
 var extend = require('.././util').extend;
 //todo: make this live
@@ -46,5 +47,11 @@ function generate(rcp, qs, whichToken) {
         return ts.generate();
     }
 }
+
+function dontRecrawl(rcp, qs, whichToken) {
+    var options = generate(rcp, qs, whichToken);
+    db.connect()
+}
+
 
 module.exports = generate;
