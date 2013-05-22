@@ -5,59 +5,65 @@ var async = require('async');
 
 var mongoClient = mongodb.MongoClient;
 
-var db = Object.create(null);
+var db = Object.create(require('events').EventEmitter.prototype);
 
 
 db.connect = function (callback) {
-    //connection
-    mongoClient.connect('mongodb://localhost/doubleAgent', function (err, db) {
-        console.log('Connected');
-        callback(err, db);
-    });
+	var self = this;
+	//connection
+	mongoClient.connect('mongodb://localhost/doubleAgent', function (err, db) {
+
+		if (err) {
+			self.emit('error', err);
+		} else {
+			console.log('Connected');
+			callback(err, db);
+		}
+	});
 
 };
 
 db.save = function (db, coll, obj, cb) {
 
-    //wrap around async
-    async.waterfall([function (callback) {
-        //collection
-        if (db !== null) {
-            db.collection(coll, function (err, collection) {
-                callback(err, collection);
-            });
-        } else {
-            callback(new Error('mongodb no dbs'));
-        }
+	//wrap around async
+	async.waterfall([function (callback) {
+		//collection
+		if (db !== null) {
+			db.collection(coll, function (err, collection) {
+				callback(err, collection);
+			});
+		} else {
+			callback(new Error('mongodb no dbs'));
+		}
 
 
-    }, function (collection, callback) {
-        //insert
-        if (obj._id !== null && typeof obj.name) {
-            collection.save(obj, function (err, result) {
-                if (err) {
-                    callback(err, result);
-                }
-                else {
-                    //todo
-                    //save the result to status collection
-                    //console.log('saved');
-                }
-            });
-        } else {
-            callback(new Error('some thing wrong about the obj'));
-        }
+	}, function (collection, callback) {
+		//insert
+		if (obj._id !== null && typeof obj.name) {
+			collection.save(obj, function (err, result) {
+				if (err) {
+					callback(err, result);
+				}
+				else {
+					//todo
+					//save the result to status collection
+					//console.log('saved');
+				}
+			});
+		} else {
+			callback(new Error('some thing wrong about the obj'));
+		}
 
-    }
+	}
 
-    ], function (err, result) {
-            //传递结果
-            cb(err, result);
-        }
+	], function (err, result) {
+			//传递结果
+			cb(err, result);
+		}
 
-        //console.log('waterfall is done');
+		//console.log('waterfall is done');
 
-    );
+	);
 
 };
 
