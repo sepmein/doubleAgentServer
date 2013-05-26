@@ -13,13 +13,13 @@ var REQUESTINTERVAL = 730;
 //send a message to the controller
 //controller delete task
 
-var controlFlow = Object.create(null);
+var flowControl = Object.create(null);
 
 //master controller
 var EventEmitter = require('events').EventEmitter;
-controlFlow.master = Object.create(EventEmitter.prototype);
+flowControl.master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
-controlFlow.master.on('taskFinished', function (seal, produce) {
+flowControl.master.on('taskFinished', function (seal, produce) {
     if (produce <= 10000) {
         //console.log('[called] master.on.taskFinished');
         //elder's produce is new born's since
@@ -34,13 +34,13 @@ controlFlow.master.on('taskFinished', function (seal, produce) {
 
     }
 });
-controlFlow.master.on('taskUnfinished', function (seal) {
+flowControl.master.on('taskUnfinished', function (seal) {
 
 });
 //master work flow:
 //just assign the work, not knowing about the consumption of the system
 //
-controlFlow.master.start = function alwaysWorking(fn, toUrl, cb) {
+flowControl.master.start = function alwaysWorking(fn, toUrl, cb) {
     setImmediate(function () {
         setTimeout(function () {
             if (typeof fn === 'function') {
@@ -90,11 +90,11 @@ var Slave = function Slave(since) {
 Slave.prototype.sendMessageToMaster = function () {
     //console.log('[called] slave.sendMessageToMaster');
     if (this.produce !== null) {
-        controlFlow.master.emit('taskFinished', this.seal, this.produce);
+        flowControl.master.emit('taskFinished', this.seal, this.produce);
         //console.log(this.seal);
         //console.log('blabla');
     } else {
-        controlFlow.master.emit('taskUnfinished', this.seal);
+        flowControl.master.emit('taskUnfinished', this.seal);
     }
 };
 Slave.prototype.workWork = function (fn, cb) {
@@ -134,7 +134,7 @@ slaves.killTheElderSlave = function (seal) {
     return killed;
 };
 
-module.exports = controlFlow;
+module.exports = flowControl;
 
 //test codes
 //var assert = require('assert');

@@ -9,13 +9,13 @@ var TOTALESTIMATE = {
 
 //token = 0 , default token
 //token = 1, second token
-var TargetUrl = function (urlPartial, queryString, whichToken) {
+var TargetUrl = function(urlPartial, queryString, whichToken) {
 	this.urlPartial = urlPartial;
 	this.queryString = queryString;
 	this.token = secret[whichToken];
 };
 
-TargetUrl.prototype.generate = function () {
+TargetUrl.prototype.generate = function() {
 	var url = 'https://api.github.com/' + this.urlPartial;
 	var qs = {
 		'client_id': this.token.client_id,
@@ -37,19 +37,25 @@ TargetUrl.prototype.generate = function () {
 
  };*/
 
-function generate(rcp, qs, whichToken) {
+function generate(recipe, queryString, whichToken) {
 	var ts;
-	if (rcp === 'repositories' || rcp === 'users') {
-		ts = new TargetUrl(rcp, qs || {since: Math.floor(Math.random() * TOTALESTIMATE[rcp])}, whichToken);
+	if (recipe === 'repositories' || recipe === 'users') {
+		var qs = {
+			since: Math.floor(Math.random() * TOTALESTIMATE[recipe])
+		};
+		if (queryString) {
+			extend(qs, queryString);
+		}
+		ts = new TargetUrl(recipe, qs, whichToken);
 		return ts.generate();
 	} else {
-		ts = new TargetUrl(rcp, qs, whichToken);
+		ts = new TargetUrl(recipe, queryString, whichToken);
 		return ts.generate();
 	}
 }
 
-function dontRecrawl(rcp, qs, whichToken) {
-	var options = generate(rcp, qs, whichToken);
+function dontRecrawl(recipe, queryString, whichToken) {
+	var options = generate(recipe, queryString, whichToken);
 	db.connect()
 }
 

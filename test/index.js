@@ -11,7 +11,7 @@ var assert = require('assert');
  */
 
 
-describe('[Web Crawler]', function () {
+/*describe('[Web Crawler]', function () {
     describe('向github发送一个http request', function () {
         it('返回的lastId不为应为空', function (done) {
             Crawler.makeRequest({to: 'repositories', qs: {since: 100}, token: 0}, function (err, lastId) {
@@ -20,4 +20,4 @@ describe('[Web Crawler]', function () {
             });
         });
     });
-});
+});*/

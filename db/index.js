@@ -66,7 +66,6 @@ db.save = function (db, coll, obj, cb) {
 			callback(new Error('mongodb no dbs'));
 		}
 
-
 	}, function (collection, callback) {
 		//insert
 		if (obj._id !== null && typeof obj.name) {

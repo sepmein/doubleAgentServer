@@ -1,6 +1,6 @@
 var crawler = require('./crawler');
 var db = require('./db');
-var controlFlow = require('./controlFlow');
+var flowControl = require('./flowControl');
 var domain = require('domain');
 
 var doubleAgent = domain.create();
@@ -9,11 +9,11 @@ doubleAgent.on('error', function (err) {
 	console.trace(err);
 });
 doubleAgent.add(db);
-doubleAgent.add(controlFlow);
+doubleAgent.add(flowControl);
 doubleAgent.add(crawler);
 
 
-var master = controlFlow.master;
+var master = flowControl.master;
 // todo make this chunk of code more elegant
 // standard flow
 // connect to db
