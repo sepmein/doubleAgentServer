@@ -1,4 +1,4 @@
-var Forever = require('../nextGeneration');
+var Forever = require('../infiniteLoop');
 
 describe('flow Control', function() {
 	describe('使用require载入模块至Forever变量', function() {
