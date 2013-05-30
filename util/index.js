@@ -55,9 +55,37 @@ util.callFn = function() {
             len = arguments.length;
             args = new Array(len - 1);
             for (i = 1; i < len; i++)
-            args[i - 1] = arguments[i];
+                args[i - 1] = arguments[i];
             handler.apply(this, args);
     }
 };
 
-    module.exports = util;
+//async version of bisection
+//arguments: 
+//big, small: the upper and lower number of the expected section
+//check: function which accept two args
+//    the first is the middle number compares to the result
+//    the second is a callback, which will be executed when the compares finished
+//    a callback should return an error first, and a status code of the compare result second
+//    status code: -1, 0 ,1 represents: smaller, equals, bigger
+//getResultFn: function
+//    when the status code equals 0, do sth. to the result
+util.bisection = function bisection(big, small, checkFn, getResultFn) {
+    var m = Math.floor((big - small) / 2) + small;
+    checkFn(m, function(err, result) {
+        if (err) {
+            // todo handle error
+            throw err;
+        } else {
+            if (result == 0) {
+                getResultFn(m);
+            } else if (result == -1) {
+                bisection(big, m, checkFn, getResultFn);
+            } else if (result) {
+                bisection(m, small, checkFn, getResultFn);
+            }
+        }
+    });
+};
+
+module.exports = util;

@@ -80,6 +80,5 @@ module.exports = crawler;
 // onAssign: '',
 // onFinish: '',
 // saveToDb: ''
-
 // }
 // }

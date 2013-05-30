@@ -7,10 +7,10 @@ var mongoClient = mongodb.MongoClient;
 
 var db = Object.create(require('events').EventEmitter.prototype);
 
-db.connect = function (callback) {
+db.connect = function(callback) {
 	var self = this;
 	//connection
-	mongoClient.connect('mongodb://localhost/doubleAgent', function (err, db) {
+	mongoClient.connect('mongodb://localhost/doubleAgent', function(err, db) {
 
 		if (err) {
 			self.emit('error', err);
@@ -22,21 +22,24 @@ db.connect = function (callback) {
 
 };
 
-db.checkSaved = function (ee, db, coll, obj, cb) {
+db.checkSaved = function(ee, db, coll, obj, cb) {
 
 	async.waterfall([
-		function (callback) {
+		function(callback) {
 
 			if (db !== null) {
-				db.collection(coll, function (err, collection) {
+				db.collection(coll, function(err, collection) {
 					callback(err, collection);
 				})
 			} else {
 				callback(new Error('mongodb no dbs'));
 			}
 
-		}, function (collection, callback) {
-			collection.findOne({"_id": obj._id}, function (err, result) {
+		},
+		function(collection, callback) {
+			collection.findOne({
+				"_id": obj._id
+			}, function(err, result) {
 				if (err) {
 					callback(err);
 				} else if (result !== null) {
@@ -44,51 +47,53 @@ db.checkSaved = function (ee, db, coll, obj, cb) {
 						ok: 1
 					});
 				} else callback(null, {
-					ok: 0
-				});
+						ok: 0
+					});
 			});
 		}
-	], function (err, result) {
-		if (err) ee.emit('error', err); else cb(result);
+	], function(err, result) {
+		if (err) ee.emit('error', err);
+		else cb(result);
 	});
 };
 
-db.save = function (db, coll, obj, cb) {
+db.save = function(db, coll, obj, cb) {
 
 	//wrap around async
-	async.waterfall([function (callback) {
-		//collection
-		if (db !== null) {
-			db.collection(coll, function (err, collection) {
-				callback(err, collection);
-			});
-		} else {
-			callback(new Error('mongodb no dbs'));
-		}
+	async.waterfall([
+		function(callback) {
+			//collection
+			if (db !== null) {
+				db.collection(coll, function(err, collection) {
+					callback(err, collection);
+				});
+			} else {
+				callback(new Error('mongodb no dbs'));
+			}
 
-	}, function (collection, callback) {
-		//insert
-		if (obj._id !== null && typeof obj.name) {
-			collection.save(obj, function (err, result) {
-				if (err) {
-					callback(err, result);
-				}
-				else {
-					//todo
-					//save the result to status collection
-					//console.log('saved');
-				}
-			});
-		} else {
-			callback(new Error('some thing wrong about the obj'));
+		},
+		function(collection, callback) {
+			//insert
+			if (obj._id !== null && typeof obj.name) {
+				collection.save(obj, function(err, result) {
+					if (err) {
+						callback(err, result);
+					} else {
+						//todo
+						//save the result to status collection
+						//console.log('saved');
+					}
+				});
+			} else {
+				callback(new Error('some thing wrong about the obj'));
+			}
 		}
+	], function(err, result) {
+		//传递结果
+		cb(err, result);
 	}
-	], function (err, result) {
-			//传递结果
-			cb(err, result);
-		}
 
-		//console.log('waterfall is done');
+	//console.log('waterfall is done');
 
 	);
 
