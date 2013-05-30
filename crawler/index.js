@@ -7,7 +7,7 @@ var crawler = Object.create(null);
 crawler.makeRequest = function makeRequest(arg, callback) {
 // console.log('crawler.makeRequest called~ the arg is ' + arg);
 // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
-    var option = targetGenerator(arg.to, arg.qs, arg.token);
+    var option = targetGenerator(arg.recipeName, arg.qs);
 
     request(option, function (error, response, body) {
         if (typeof body === 'string' && body[0] === '[') {
