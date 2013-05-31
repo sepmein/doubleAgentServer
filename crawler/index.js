@@ -3,13 +3,19 @@ var async = require('async');
 var targetGenerator = require('./targetGenerator');
 
 var crawler = Object.create(null);
-//params arg { to: urlPartial, qs:queryString , arg.token}
-crawler.makeRequest = function makeRequest(arg, callback) {
-// console.log('crawler.makeRequest called~ the arg is ' + arg);
-// console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
-    var option = targetGenerator(arg.to, arg.qs, arg.token);
-
-    request(option, function (error, response, body) {
+/*
+    target api example:
+    {
+        recipeName: 'staredRepos',
+        args: {
+            
+        }
+    }
+*/
+crawler.makeRequest = function makeRequest(target, callback) {
+    // console.log('crawler.makeRequest called~ the arg is ' + arg);
+    // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
+    request(target, function (error, response, body) {
         if (typeof body === 'string' && body[0] === '[') {
             try {
                 var results = JSON.parse(body);
@@ -38,30 +44,6 @@ crawler.makeRequest = function makeRequest(arg, callback) {
 
 };
 
-
-/*//profiling
- crawler.getGithubRepositories = function () {
-
- var startingTime = new Date();
- var counter = 0;
- async.waterfall(
- [function (callback) {
- makeRequest(null, callback);
- }, function (arg, callback) {
- makeRequest({to: arg}, callback);
- }, function (arg, callback) {
- makeRequest({to: arg}, callback);
- }, function (arg, callback) {
- makeRequest({to: arg}, callback);
- }, function (arg, callback) {
- makeRequest({to: arg}, callback);
- }], function (err, result) {
- var endingTime = new Date();
- var processingTime = (endingTime - startingTime) / 1000;
- console.log('处理总共用时 : ' + processingTime + '秒');
- });
- };*/
-
 module.exports = crawler;
 
 //master worker mode
@@ -81,6 +63,5 @@ module.exports = crawler;
 // onAssign: '',
 // onFinish: '',
 // saveToDb: ''
-
 // }
 // }

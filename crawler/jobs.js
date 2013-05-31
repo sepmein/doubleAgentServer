@@ -2,7 +2,7 @@ function create(obj) {
     return new Job(obj);
 }
 
-var Job = function (obj) {
+var Job = function(obj) {
     /*obj api
      {
      name: String,
@@ -30,7 +30,7 @@ var Job = function (obj) {
     this.prerequisite
 };
 
-Job.prototype.isPrepared = function () {
+Job.prototype.isPrepared = function() {
 
 }
 
