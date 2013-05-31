@@ -33,7 +33,7 @@ var dosomething = function (ruler, cb) {
                     args: [currentGuess]
                 },
                 queryString: {
-                    start_page: 10;
+                    start_page: 10
                 }
             });
 
