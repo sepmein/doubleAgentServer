@@ -4,7 +4,7 @@ var t9Util = require('.././util');
 var inherits = require('util').inherits;
 var async = require('async');
 var Infiniteloop = require('infinite-loop');
-
+var EventEmitter = require('events').EventEmitter;
 
 // the limitation is 720ms/request
 var REQUESTINTERVAL = 730;
@@ -17,7 +17,6 @@ var REQUESTINTERVAL = 730;
 var flowControl = Object.create(null);
 
 //master controller
-var EventEmitter = require('events').EventEmitter;
 flowControl.master = Object.create(EventEmitter.prototype);
 //Object.getPrototypeOf(master);
 flowControl.master.on('taskFinished', function (seal, produce) {

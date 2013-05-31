@@ -1,4 +1,5 @@
 var crawler = require('./crawler');
+var targetGenerator = require('./crawler/targetGenerator');
 var db = require('./db');
 var flowControl = require('./flowControl');
 var domain = require('domain');
@@ -63,10 +64,9 @@ doubleAgent.run(
     db.connect(function (err, database) {
         console.log('start crawling!');
         if (!err) {
+            var getAllReposOption = targetGenerator('allRepos',{}); 
             master.start(
-                crawler.makeRequest, {
-                    recipeName: 'allRepos'
-                }, function (err, results) {
+                crawler.makeRequest, getAllReposOption, function (err, results) {
                     //console.log('request made');
                     if (err) {
                         console.log(err);
@@ -81,10 +81,10 @@ doubleAgent.run(
                         });
                     }
                 });
+            var getAllUsersOption = targetGenerator('allUsers',{}); 
+
             master.start(
-                crawler.makeRequest, {
-                    recipeName: 'allUsers'
-                }, function (err, results) {
+                crawler.makeRequest, getAllUsersOption, function (err, results) {
                     //console.log('request made');
                     if (err) {
                         console.log(err);
@@ -97,23 +97,10 @@ doubleAgent.run(
                                 throw err;
                             }
                         });
-
-                        //                    crawler.makeRequest(
-                        //                        {
-                        //                            to: 'users/' + results[i].login + '/followers',
-                        //                            qs: {
-                        //                                per_page: 1
-                        //                            },
-                        //                            token: 2
-                        //                        }
-                        //                        , function (err, results, response) {
-                        //                            console.log('made some results');
-                        //                            console.log(results);
-                        //                            console.dir(response.headers);
-                        //                        });
                     }
                 });
         } else {
             throw err;
         }
-    }));
+    });
+);
