@@ -1,29 +1,34 @@
 var db = require('../.././db');
 var secret = require('../.././config');
 var extend = require('../.././util').extend;
-
 var recipes = require('./recipes');
 
-var TargetUrl = function (recipe, queryString) {
+var BASEURL = 'https://api.github.com/';
+
+var TargetUrl = function (recipe, queryArg) {
     this.recipe = recipe;
-    this.queryString = queryString;
+    this.queryArg = queryArg;
     //随机tokenId
     var tokenId = Math.floor((Object.keys(secret).length - 1) * Math.random());
     this.token = secret[tokenId];
 };
 
 TargetUrl.prototype.generate = function () {
-    var url = 'https://api.github.com/' + this.recipe.urlPartial;
     var qs = {
         'client_id': this.token.client_id,
         'client_secret': this.token.client_secret
     };
-    if (this.queryString) {
-        extend(qs, this.queryString);
+    //extend recipe qs
+    extend(qs, this.recipe.qs);
+    //extend custom qs
+    if (this.queryArg.queryString) {
+        extend(qs, this.queryArg.queryString);
     }
-    if (this.recipe.queryString) {
-        extend(qs, this.recipe.queryString);
+    //append custom url partial
+    if (this.queryArg.urlAppend) {
+        this.recipe.urlAppend(this.queryArg.urlAppend);
     }
+    var url = BASEURL + this.recipe.urlPartial;
     return {
         url: url,
         qs: qs,
@@ -33,19 +38,26 @@ TargetUrl.prototype.generate = function () {
     }
 };
 
-function generate(recipe, queryString) {
+/*  API
+    example
+    generate(
+        'staredRepos', {
+            urlAppend: {
+                type: '..',
+                args: [130, 230]
+            },
+            queryString: {
+                start_page : 10
+            }
+        }
+*/
+function generate(recipe, queryArg) {
     if (!recipes[recipe]) {
         console.error(new Error('You"ve enter a wrong recipe name, change it!'));
     }
     var r = recipes[recipe];
-    var ts = new TargetUrl(r, queryString);
+    var ts = new TargetUrl(r, queryArg);
     return ts.generate();
 }
-
-/*function dontRecrawl(recipe, queryString, whichToken) {
- var options = generate(recipe, queryString, whichToken);
- db.connect()
- }*/
-
 
 module.exports = generate;

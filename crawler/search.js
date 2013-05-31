@@ -6,33 +6,38 @@
 var Infiniteloop = require('Infinite-loop');
 var makeRequest = require('.././crawler').makeRequest;
 var bisection = require('.././util').bisection;
+var targetGenerator = require('./targetGenerator');
 
 var dosomething = function (ruler, cb) {
 
-    var FIRSTGUESE = 1143;
-    var INCREMENT = 20;
-
-    var currentGuess = FIRSTGUESE;
-    var downTimes = 0;
-    var closestDown;
-    var upTimes = 0;
-    var closestUp;
+    var FIRSTGUESE = 1143,
+        INCREMENT = 20,
+        currentGuess = FIRSTGUESE,
+        downTimes = 0,
+        closestDown,
+        upTimes = 0,
+        closestUp,
+        lastOperation = {
+            operation: null,
+            optimes: 0
+        };
 
     //两分法算法获取需要获取的值
     if (ruler.length === 0) {
         //init
         //db.check later
         function firstOperation() {
-            var params = {
-                to: '/legacy/repos/search/' + 'stars%3A>' + firstGuese,
-                qs: {
-                    per_page: 100,
-                    start_page: 10
+            var options = targetGenerator('startedRepos',{
+                urlAppend: {
+                    type: '>',
+                    args: [currentGuess]
                 },
-                token: 0
-            };
+                queryString: {
+                    start_page: 10;
+                }
+            });
 
-            makeRequest(params, function (err, result, response) {
+            makeRequest(options, function (err, result, response) {
 
                 if (err) throw err;
 
@@ -54,15 +59,25 @@ var dosomething = function (ruler, cb) {
                     if (result.length === 100) {
                         //返回结果数量太多， 减少猜想值
                         //继续
-                        closestUp = currentGuess;
-                        currentGuess -= INCREMENT;
+                        if(lastOperation.operation === 'down') {
+                            lastOperation.optimes ++;
+                            currentGuess -= INCREMENT*lastOperation.optimes; 
+                        } else {
+                            //rest optimes
+                            lastOperation.optimes = 0;
+                            currentGuess -= INCREMENT;
+                        }
+                        lastOperation.operation = 'down';
                         upTimes++;
-
+                        closestUp = currentGuess;
+                        firstOperation();
+                        
                     } else if (result.length < 0) {
                         //返回结果数量太少， 增加猜想值
                         closestDown = currentGuess;
                         currentGuess += INCREMENT;
                         downTimes++;
+                        firstOperation();
                     }
                 }
             });
