@@ -3,7 +3,7 @@ var async = require('async');
 var targetGenerator = require('./targetGenerator');
 
 var crawler = Object.create(null);
-//params arg { to: urlPartial, qs:queryString }
+//params arg { to: urlPartial, qs:queryString , arg.token}
 crawler.makeRequest = function makeRequest(arg, callback) {
 // console.log('crawler.makeRequest called~ the arg is ' + arg);
 // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
@@ -31,6 +31,7 @@ crawler.makeRequest = function makeRequest(arg, callback) {
             //console.log(error);
             //console.dir(response.headers);
             //console.dir(results);
+            callback(new Error('no result'), [], response);
         }
 
     });
