@@ -64,7 +64,7 @@ doubleAgent.run(
     db.connect(function (err, database) {
         console.log('start crawling!');
         if (!err) {
-            var getAllReposOption = targetGenerator('allRepos',{}); 
+            var getAllReposOption = targetGenerator('allRepos', {});
             master.start(
                 crawler.makeRequest, getAllReposOption, function (err, results) {
                     //console.log('request made');
@@ -81,7 +81,7 @@ doubleAgent.run(
                         });
                     }
                 });
-            var getAllUsersOption = targetGenerator('allUsers',{}); 
+            var getAllUsersOption = targetGenerator('allUsers', {});
 
             master.start(
                 crawler.makeRequest, getAllUsersOption, function (err, results) {
@@ -102,5 +102,5 @@ doubleAgent.run(
         } else {
             throw err;
         }
-    });
+    })
 );
