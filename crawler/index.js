@@ -12,10 +12,11 @@ var crawler = Object.create(null);
         }
     }
 */
-crawler.makeRequest = function makeRequest(target, callback) {
+crawler.makeRequest = function makeRequest(options, callback) {
     // console.log('crawler.makeRequest called~ the arg is ' + arg);
     // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
-    request(target, function (error, response, body) {
+    console.log(options);
+    request(options, function (error, response, body) {
         if (typeof body === 'string' && body[0] === '[') {
             try {
                 var results = JSON.parse(body);
@@ -38,6 +39,7 @@ crawler.makeRequest = function makeRequest(target, callback) {
             //console.dir(response.headers);
             //console.dir(results);
             callback(new Error('no result'), [], response);
+            console.log(results);
         }
 
     });

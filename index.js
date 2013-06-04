@@ -3,6 +3,7 @@ var targetGenerator = require('./crawler/targetGenerator');
 var db = require('./db');
 var flowControl = require('./flowControl');
 var domain = require('domain');
+var github = require('./github');
 
 var doubleAgent = domain.create();
 
@@ -22,23 +23,6 @@ var master = flowControl.master;
 // make request
 // save the results to collection when done
 // params: database, collection, request url(generator),
-var Job = function (name, params, todoList) {
-
-    this.name = name;
-    this.params = params;
-    this.todoList = todoList;
-
-};
-Job.prototype.onFinish = function (err, results) {
-    if (err) {
-        console.log(err);
-    }
-    for (var i = results.length - 1; i >= 0; i--) {
-        for (var u = this.todoList.length - 1; u >= 0; u--) {
-            this.todoList[u](results[i]);
-        }
-    }
-};
 
 function crawlGithub(database, to) {
     master.start(crawler.makeRequest, {
@@ -64,9 +48,8 @@ doubleAgent.run(
     db.connect(function (err, database) {
         console.log('start crawling!');
         if (!err) {
-            var getAllReposOption = targetGenerator('allRepos',{}); 
             master.start(
-                crawler.makeRequest, getAllReposOption, function (err, results) {
+                github.getAllRepos, function (err, results) {
                     //console.log('request made');
                     if (err) {
                         console.log(err);
@@ -81,10 +64,8 @@ doubleAgent.run(
                         });
                     }
                 });
-            var getAllUsersOption = targetGenerator('allUsers',{}); 
-
             master.start(
-                crawler.makeRequest, getAllUsersOption, function (err, results) {
+                github.getAllUsers,  function (err, results) {
                     //console.log('request made');
                     if (err) {
                         console.log(err);
