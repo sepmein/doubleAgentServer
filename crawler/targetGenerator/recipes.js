@@ -7,13 +7,13 @@ var TOTALESTIMATE = {
 var recipes = {
     'allRepos': {
         urlPartial: 'repos',
-        queryString: {
+        qs: {
             since: Math.floor(Math.random() * TOTALESTIMATE['allRepos'])
         }
     },
     'allUsers': {
         urlPartial: 'users',
-        queryString: {
+        qs: {
             since: Math.floor(Math.random() * TOTALESTIMATE['allUsers'])
         }
     },
