@@ -157,3 +157,5 @@ github.search.followedUsers.checkLength = function (obj, callback) {
         }
     });
 };
+
+module.exports = github;
