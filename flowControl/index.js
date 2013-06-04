@@ -40,7 +40,7 @@ flowControl.master.on('taskUnfinished', function (seal) {
 //master work flow:
 //just assign the work, not knowing about the consumption of the system
 //
-flowControl.master.start = function alwaysWorking(fn, toUrl, cb) {
+flowControl.master.start = function alwaysWorking(fn, cb) {
     //var f = new Forever();
 
 
@@ -48,11 +48,12 @@ flowControl.master.start = function alwaysWorking(fn, toUrl, cb) {
         setTimeout(function () {
             if (typeof fn === 'function') {
                 //console.log('working with master\s jobs and the since is ' + self.since);
-                fn(toUrl, cb);
+                fn(cb);
             } else {
+                console.log(typeof fn);
                 console.log('from slave: nothing todo');
             }
-            alwaysWorking(fn, toUrl, cb);
+            alwaysWorking(fn, cb);
         }, REQUESTINTERVAL);
 
     });

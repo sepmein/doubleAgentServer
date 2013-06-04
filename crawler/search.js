@@ -152,5 +152,4 @@ function getStaredRepositories() {
 
     loop.add(grab).run();
 
-
 }
