@@ -1,12 +1,10 @@
-var recipes = {};
-
 //todo: make this live
 var TOTALESTIMATE = {
     allRepos: 10000000,
     allUsers: 4420000
 };
 
-recipes = {
+var recipes = {
     'allRepos': {
         urlPartial: 'repos',
         queryString: {
@@ -55,7 +53,31 @@ recipes = {
             per_page: 100
         }
     },
-    'watchedUsers': {}
+    'followedUsers': {
+        urlPartial: 'legacy/users/search/follows:',
+        urlAppend: function (obj) {
+            //argument: type, num
+            var type = obj.type;
+            var args = obj.args;
+            switch (type) {
+                case '=':
+                    this.urlPartial += args[0];
+                    break;
+                case '>':
+                    this.urlPartial += ('>' + args[0]);
+                    break;
+                case '<':
+                    this.urlPartial += ('<' + args[0]);
+                    break;
+                case '..':
+                    this.urlPartial += (args[0] + '..' + args[1]);
+                    break;
+            }
+        },
+        qs: {
+            per_page: 100
+        }
+    }
 };
 
 module.exports = recipes;
