@@ -102,5 +102,5 @@ doubleAgent.run(
         } else {
             throw err;
         }
-    });
+    })
 );
