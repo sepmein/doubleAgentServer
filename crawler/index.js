@@ -15,8 +15,9 @@ var crawler = Object.create(null);
 crawler.makeRequest = function makeRequest(options, callback) {
     // console.log('crawler.makeRequest called~ the arg is ' + arg);
     // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');
-    console.log(options);
+    // console.log(options);
     request(options, function (error, response, body) {
+        //console.log(body);
         if (typeof body === 'string' && body[0] === '[') {
             try {
                 var results = JSON.parse(body);

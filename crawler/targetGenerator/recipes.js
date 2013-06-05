@@ -6,7 +6,7 @@ var TOTALESTIMATE = {
 
 var recipes = {
     'allRepos': {
-        urlPartial: 'repos',
+        urlPartial: 'repositories',
         qs: {
             since: Math.floor(Math.random() * TOTALESTIMATE['allRepos'])
         }
