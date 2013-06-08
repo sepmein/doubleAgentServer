@@ -8,7 +8,7 @@ var makeRequest = require('.././crawler').makeRequest;
 var bisection = require('.././util').bisection;
 var targetGenerator = require('./targetGenerator');
 
-var dosomething = function (ruler, cb) {
+var dosomething = function(ruler, cb) {
 
     var FIRSTGUESE = 1143,
         INCREMENT = 20,
@@ -25,69 +25,101 @@ var dosomething = function (ruler, cb) {
     //两分法算法获取需要获取的值
     if (ruler.length === 0) {
         //init
-        //db.check later
+        //db.check ruler.length later
         function firstOperation() {
-            var options = targetGenerator('startedRepos',{
+            github.search.staredRepos.checkLength({
                 urlAppend: {
                     type: '>',
                     args: [currentGuess]
-                },
-                queryString: {
-                    start_page: 10
                 }
-            });
+            }, function(err, result) {
+                if (!err) {
+                    if (downTimes * upTimes > 0) {
+                        //如果预测值的上下数据都有了
+                        //现在才是两分法啊！！！尼玛，算法太复杂了
+                        bisection(closestUp, closestDown, bisectionJudgement, function(result) {
+                            stadardPageCrawler(result);
+                            cb(result);
+                        });
+                    } else {
+                        switch (result) {
+                            case 0:
+                                //恰当，可以不用做两分法测试了,应该直接使用该值抓取数据
+                                //由于是首次抓取所以情况特殊，searchTerm应使用特别语句生成
+                                stadardPageCrawler(currentGuess);
+                                cb(currentGuess);
+                                break;
+                            case 1:
+                                //返回结果数量太多， 减少猜想值
+                                //继续
+                                if (lastOperation.operation === 'down') {
+                                    lastOperation.optimes++;
+                                    currentGuess -= INCREMENT * lastOperation.optimes;
+                                } else {
+                                    //rest optimes
+                                    lastOperation.optimes = 0;
+                                    currentGuess -= INCREMENT;
+                                }
+                                lastOperation.operation = 'down';
+                                //zai shang mian de ci shu
+                                upTimes++;
+                                closestUp = currentGuess;
+                                firstOperation();
+                                break;
+                            case -1: 
+                                //返回结果数量太少， 增加猜想值
+                                //go on
+                                if (lastOperation.operation === 'up') {
+                                    lastOperation.optimes++;
+                                    currentGuess += INCREMENT * lastOperation.optimes;
+                                } else {
+                                    //rest optimes
+                                    lastOperation.optimes = 0;
+                                    currentGuess += INCREMENT;
+                                }
+                                lastOperation.operation = 'up';
+                                downTimes++;
+                                closestDown = currentGuess;
+                                firstOperation();
+                                break;
+                        }
+                    }
+                }
+            })
 
-            makeRequest(options, function (err, result, response) {
+            makeRequest(options, function(err, result, response) {
 
                 if (err) throw err;
 
                 if (result.length > 0 && result.length < 100) {
-                    //恰当，可以不用做两分法测试了,应该直接使用该值抓取数据
-                    //由于是首次抓取所以情况特殊，searchTerm应使用特别语句生成
-                    stadardPageCrawler(currentGuess);
-                    cb(currentGuess);
+
+
                 } else {
                     if (downTimes * upTimes > 0) {
-                        //如果预测值的上下数据都有了
-                        //现在才是两分法啊！！！尼玛，算法太复杂了
-                        bisection(closestUp, closestDown, bisectionJudgement, function (result) {
+
+                        bisection(closestUp, closestDown, bisectionJudgement, function(result) {
                             stadardPageCrawler(result);
                             cb(result);
                         });
 
                     }
                     if (result.length === 100) {
-                        //返回结果数量太多， 减少猜想值
-                        //继续
-                        if(lastOperation.operation === 'down') {
-                            lastOperation.optimes ++;
-                            currentGuess -= INCREMENT*lastOperation.optimes; 
-                        } else {
-                            //rest optimes
-                            lastOperation.optimes = 0;
-                            currentGuess -= INCREMENT;
-                        }
-                        lastOperation.operation = 'down';
-                        upTimes++;
-                        closestUp = currentGuess;
-                        firstOperation();
-                        
+
+
+
                     } else if (result.length < 0) {
-                        //返回结果数量太少， 增加猜想值
-                        closestDown = currentGuess;
-                        currentGuess += INCREMENT;
-                        downTimes++;
-                        firstOperation();
+
                     }
                 }
             });
         }
     } else {
-
+        //first Operation has been done
+        //
     }
 };
 
-var bisectionJudgement = function (m, callback) {
+var bisectionJudgement = function(m, callback) {
     //根据middle值，生成request参数
     var params = {
 
@@ -95,7 +127,7 @@ var bisectionJudgement = function (m, callback) {
     };
 
     //其实所有request的区别都是生成params不同，以及callback算法不同
-    makeRequest(params, function (err, result, response) {
+    makeRequest(params, function(err, result, response) {
         if (result.length === 100) {
             callback(null, 1);
         } else if (result.length === 0) {
@@ -107,7 +139,7 @@ var bisectionJudgement = function (m, callback) {
 };
 
 
-var stadardPageCrawler = function (currentGuess) {
+var stadardPageCrawler = function(currentGuess) {
 
     //使用对象判断，减少if else迭代
     var recipe = {
@@ -121,7 +153,7 @@ var stadardPageCrawler = function (currentGuess) {
     var params = {
 
     };
-    makeRequest(params, function (err, result, response) {
+    makeRequest(params, function(err, result, response) {
         //save to db
         db.save();
     });
@@ -138,7 +170,7 @@ function getStaredRepositories() {
     var loop = new Infiniteloop();
 
     function grab() {
-        dosomething(ruler, function (x) {
+        dosomething(ruler, function(x) {
             //忘了status是用来干嘛的了。。汗
             if (status === true) {
                 ruler.data.push(x);
