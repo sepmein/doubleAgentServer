@@ -48,6 +48,7 @@ flowControl.master.start = function alwaysWorking(fn, cb) {
         setTimeout(function () {
             if (typeof fn === 'function') {
                 //console.log('working with master\s jobs and the since is ' + self.since);
+                //TODO 如何解决cb前有多个参数的问题？？？
                 fn(cb);
             } else {
                 console.log(typeof fn);

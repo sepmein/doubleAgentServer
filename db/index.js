@@ -11,7 +11,6 @@ db.connect = function(callback) {
 	var self = this;
 	//connection
 	mongoClient.connect('mongodb://localhost/doubleAgent', function(err, db) {
-
 		if (err) {
 			self.emit('error', err);
 		} else {
@@ -76,13 +75,7 @@ db.save = function(db, coll, obj, cb) {
 			//insert
 			if (obj._id !== null && typeof obj.name) {
 				collection.save(obj, function(err, result) {
-					if (err) {
-						callback(err, result);
-					} else {
-						//todo
-						//save the result to status collection
-						//console.log('saved');
-					}
+                    callback(err, result);
 				});
 			} else {
 				callback(new Error('some thing wrong about the obj'));

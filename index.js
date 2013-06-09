@@ -57,9 +57,12 @@ doubleAgent.run(
                     for (var i = results.length - 1; i >= 0; i--) {
                         results[i]._id = results[i].id;
                         delete results[i].id;
-                        db.save(database, 'repositories', results[i], function (err) {
+                        //console.log(results[i]);
+                        db.save(database, 'repositories', results[i], function (err, dbSaveResult) {
                             if (err) {
                                 throw err;
+                            } else {
+                                console.log(dbSaveResult);
                             }
                         });
                     }
