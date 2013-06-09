@@ -5,7 +5,7 @@ var recipes = require('./recipes');
 
 var BASEURL = 'https://api.github.com/';
 
-var TargetUrl = function (recipe, queryArg) {
+var TargetUrl = function(recipe, queryArg) {
     this.recipe = recipe;
     this.queryArg = queryArg;
     //随机tokenId
@@ -13,7 +13,7 @@ var TargetUrl = function (recipe, queryArg) {
     this.token = secret[tokenId];
 };
 
-TargetUrl.prototype.generate = function () {
+TargetUrl.prototype.generate = function() {
     var qs = {
         'client_id': this.token.client_id,
         'client_secret': this.token.client_secret
@@ -51,6 +51,7 @@ TargetUrl.prototype.generate = function () {
             }
         }
 */
+
 function generate(recipe, queryArg) {
     if (!recipes[recipe]) {
         console.error(new Error('You"ve enter a wrong recipe name, change it!'));

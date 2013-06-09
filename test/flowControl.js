@@ -11,17 +11,17 @@ describe('flow Control', function () {
     });
     describe('新建一个加一函数，测试Forever模块', function () {
         it('should log something', function (done) {
-            var counter = 0;
+            var counter = {num:0};
 
             function addOne(c) {
-                console.log(c++);
+                console.log(c.num++);
             }
 
             var f = new Forever();
             f.onError(function (err) {
                 console.log(err);
             });
-            f.add(addOne, counter).invoke();
+            f.add(addOne, counter).run();
             setTimeout(function () {
                 done()
             }, 1000);
