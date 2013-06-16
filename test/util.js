@@ -24,8 +24,7 @@ describe('testing util', function() {
 	}
 
 	it('bisection algorithm should get expected result', function(done) {
-		t9util.bisection(1236, -100, check, getResult);
+		t9util.bisection({big:1236, small:-100}, check, getResult);
 		done();
-
 	});
 });
