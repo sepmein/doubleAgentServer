@@ -2,7 +2,7 @@ var request = require('request');
 var async = require('async');
 var targetGenerator = require('./targetGenerator');
 
-var crawler = Object.create(null);
+var crawler = {};
 /*
     target api example:
     {

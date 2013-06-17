@@ -14,10 +14,10 @@ var REQUESTINTERVAL = 730;
 //send a message to the controller
 //controller delete task
 
-var flowControl = Object.create(null);
+var flowControl = {};
 
 //master controller
-flowControl.master = Object.create(EventEmitter.prototype);
+flowControl.master = new EventEmitter();
 //Object.getPrototypeOf(master);
 flowControl.master.on('taskFinished', function (seal, produce) {
     if (produce <= 10000) {
@@ -115,7 +115,7 @@ Slave.prototype.workWork = function (fn, cb) {
 
 //slaves
 //Data level about slave
-var slaves = Object.create(null);
+var slaves = {};
 //slave names
 slaves.list = {};
 //born a baby slave

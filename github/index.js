@@ -1,5 +1,5 @@
 /*github api*/
-var github = Object.create(null);
+var github = {};
 var makeRequest = require('.././crawler').makeRequest;
 var targetGenerator = require('.././crawler/targetGenerator');
 
@@ -17,7 +17,7 @@ github.getAllRepos = function(callback) {
     });
 };
 
-github.search = Object.create(null);
+github.search = {};
 
 
 /*

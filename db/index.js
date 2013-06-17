@@ -1,11 +1,9 @@
 var mongodb = require('mongodb');
 var async = require('async');
-
-//console.log(mongodb);
-
+var EventEmitter = require('events').EventEmitter;
 var mongoClient = mongodb.MongoClient;
 
-var db = Object.create(require('events').EventEmitter.prototype);
+var db = new EventEmitter();
 
 db.connect = function(callback) {
 	//connection
