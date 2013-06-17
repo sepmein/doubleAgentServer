@@ -1,5 +1,5 @@
-var fs = require('fs');
-var async = require('async');
+var fs = require('fs'),
+async = require('async');
 
 for (var i = 1000; i > 0; i--) {
     // console.log(i);

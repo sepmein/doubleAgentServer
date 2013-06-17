@@ -1,10 +1,10 @@
 'use strict';
 
-var t9Util = require('.././util');
-var inherits = require('util').inherits;
-var async = require('async');
-var Infiniteloop = require('infinite-loop');
-var EventEmitter = require('events').EventEmitter;
+var t9Util = require('.././util'),
+inherits = require('util').inherits,
+async = require('async'),
+Infiniteloop = require('infinite-loop'),
+EventEmitter = require('events').EventEmitter;
 
 // the limitation is 720ms/request
 var REQUESTINTERVAL = 730;

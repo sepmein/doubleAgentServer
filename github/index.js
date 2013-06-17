@@ -1,7 +1,7 @@
 /*github api*/
-var github = {};
-var makeRequest = require('.././crawler').makeRequest;
-var targetGenerator = require('.././crawler/targetGenerator');
+var github = {},
+makeRequest = require('.././crawler').makeRequest,
+targetGenerator = require('.././crawler/targetGenerator');
 
 github.getAllUsers = function(callback) {
     var options = targetGenerator('allRepos', {});

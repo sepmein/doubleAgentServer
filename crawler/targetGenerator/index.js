@@ -1,9 +1,8 @@
-var db = require('../.././db');
-var secret = require('../.././config');
-var extend = require('../.././util').extend;
-var recipes = require('./recipes');
-
-var BASEURL = 'https://api.github.com/';
+var db = require('../.././db'),
+secret = require('../.././config'),
+extend = require('../.././util').extend,
+recipes = require('./recipes');,
+BASE_URL = 'https://api.github.com/';
 
 var TargetUrl = function(recipe, queryArg) {
     this.recipe = recipe;
@@ -28,7 +27,7 @@ TargetUrl.prototype.generate = function() {
     if (this.queryArg.urlAppend) {
         this.recipe.urlAppend(this.queryArg.urlAppend);
     }
-    var url = BASEURL + this.recipe.urlPartial;
+    var url = BASE_URL + this.recipe.urlPartial;
     return {
         url: url,
         qs: qs,

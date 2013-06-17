@@ -3,9 +3,9 @@
  要重构啊！重构啊！亲！！！！！！
  */
 
-var Infiniteloop = require('Infinite-loop');
-var bisection = require('.././util').bisection;
-var github = require('.././github');
+var Infiniteloop = require('Infinite-loop'),
+bisection = require('.././util').bisection,
+github = require('.././github');
 
 var doSomething = function (ruler, cb) {
 
