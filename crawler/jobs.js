@@ -2,7 +2,7 @@ function create(obj) {
     return new Job(obj);
 }
 
-var Job = function(obj) {
+var Job = function (obj) {
     /*obj api
      {
      name: String,
@@ -30,13 +30,19 @@ var Job = function(obj) {
     this.prerequisite
 };
 
-Job.prototype.isPrepared = function() {
+Job.prototype.isPrepared = function () {
 
 }
 
 module.exports = create;
 
 
-
-1. db.conn =>
-2.1 star值为x0时，大于x0的所有项目数量小于1000 > 获得x0值， 获得结果数组
+1.
+db.conn =
+>
+2.1
+star值为x0时
+，
+大于x0的所有项目数量小于1000 > 获得x0值
+，
+获得结果数组

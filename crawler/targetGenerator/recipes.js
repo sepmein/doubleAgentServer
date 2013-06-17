@@ -30,7 +30,7 @@ var recipes = {
      */
     'staredRepos': {
         urlPartial: 'legacy/repos/search/stars:',
-        urlAppend: function(obj) {
+        urlAppend: function (obj) {
             //argument: type, num
             var type = obj.type;
             var args = obj.args;
@@ -55,7 +55,7 @@ var recipes = {
     },
     'followedUsers': {
         urlPartial: 'legacy/users/search/follows:',
-        urlAppend: function(obj) {
+        urlAppend: function (obj) {
             //argument: type, num
             var type = obj.type;
             var args = obj.args;

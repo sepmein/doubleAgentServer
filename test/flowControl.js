@@ -11,7 +11,7 @@ describe('flow Control', function () {
     });
     describe('新建一个加一函数，测试Forever模块', function () {
         it('should log something', function (done) {
-            var counter = {num:0};
+            var counter = {num: 0};
 
             function addOne(c) {
                 console.log(c.num++);

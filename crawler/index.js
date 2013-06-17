@@ -1,16 +1,17 @@
 var request = require('request'),
-async = require('async'),
-targetGenerator = require('./targetGenerator');,
+    async = require('async'),
+    targetGenerator = require('./targetGenerator');
+,
 crawler = {};
 /*
-    target api example:
-    {
-        recipeName: 'staredRepos',
-        args: {
-            
-        }
-    }
-*/
+ target api example:
+ {
+ recipeName: 'staredRepos',
+ args: {
+
+ }
+ }
+ */
 crawler.makeRequest = function makeRequest(options, callback) {
     // console.log('crawler.makeRequest called~ the arg is ' + arg);
     // console.log('and the callback ' + ((typeof callback === 'function')?'is':'is not') + ' a function');

@@ -68,7 +68,7 @@ doubleAgent.run(
                     }
                 });
             master.start(
-                github.getAllUsers,  function (err, results) {
+                github.getAllUsers, function (err, results) {
                     //console.log('request made');
                     if (err) {
                         console.log(err);

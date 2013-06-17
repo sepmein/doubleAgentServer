@@ -4,8 +4,8 @@
  */
 
 var Infiniteloop = require('Infinite-loop'),
-bisection = require('.././util').bisection,
-github = require('.././github');
+    bisection = require('.././util').bisection,
+    github = require('.././github');
 
 var doSomething = function (ruler, cb) {
 
