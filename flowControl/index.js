@@ -103,10 +103,9 @@ Slave.prototype.sendMessageToMaster = function () {
     }
 };
 Slave.prototype.workWork = function (fn, cb) {
-    var self = this;
     if (typeof fn === 'function') {
         //console.log('working with master\s jobs and the since is ' + self.since);
-        fn(self.since, cb);
+        fn(this.since, cb);
     } else {
         console.log('from slave: nothing todo');
     }

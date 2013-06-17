@@ -8,16 +8,15 @@ var mongoClient = mongodb.MongoClient;
 var db = Object.create(require('events').EventEmitter.prototype);
 
 db.connect = function(callback) {
-	var self = this;
 	//connection
 	mongoClient.connect('mongodb://localhost/doubleAgent', function(err, db) {
 		if (err) {
-			self.emit('error', err);
+			this.emit('error', err);
 		} else {
 			console.log('Connected');
 			callback(err, db);
 		}
-	});
+	}.bind(this));
 
 };
 
