@@ -3,28 +3,29 @@
  * 要重构啊！重构啊！亲！！！！！！
  * */
 
-var Infiniteloop = require('Infinite-loop'),
+var InfiniteLoop = require('Infinite-loop'),
     bisection = require('.././util').bisection,
     github = require('.././github');
 
 var doSomething = function (ruler, cb) {
 
-    var FIRSTGUESE = 1143,
+    var FIRST_GUESS = 1143,
 
-    //todo modify it
-        FIRSTGAP = 100,
+    //todo modify it, make it active
+        FIRST_GAP = 100,
         INCREMENT = 20,
-        currentGuess = FIRSTGUESE,
+        currentGuess = FIRST_GUESS,
         downTimes = 0,
         closestDown,
         upTimes = 0,
         closestUp,
         lastOperation = {
             operation: null,
-            optimes: 0
+            opTimes: 0
         },
         rulerLength = ruler.length,
-        lastRuler = ruler[ruler.length - 1];
+        lastRuler = ruler[ruler.length - 1],
+        BIGGEST_STARS_REPOS_NUM_BIGGER_THAN_1000 = 32;
 
     //两分法算法获取需要获取的值
     if (ruler.length === 0) {
@@ -68,12 +69,12 @@ var doSomething = function (ruler, cb) {
                             //返回结果数量太多， 减少猜想值
                             //继续
                             if (lastOperation.operation === 'down') {
-                                lastOperation.optimes++;
-                                currentGuess -= INCREMENT * lastOperation.optimes;
+                                lastOperation.opTimes++;
+                                currentGuess -= INCREMENT * lastOperation.opTimes;
                             } else {
 
-                                //rest optimes
-                                lastOperation.optimes = 0;
+                                //rest opTimes
+                                lastOperation.opTimes = 0;
                                 currentGuess -= INCREMENT;
                             }
                             lastOperation.operation = 'down';
@@ -88,12 +89,12 @@ var doSomething = function (ruler, cb) {
                             //返回结果数量太少， 增加猜想值
                             //go on
                             if (lastOperation.operation === 'up') {
-                                lastOperation.optimes++;
-                                currentGuess += INCREMENT * lastOperation.optimes;
+                                lastOperation.opTimes++;
+                                currentGuess += INCREMENT * lastOperation.opTimes;
                             } else {
 
-                                //rest optimes
-                                lastOperation.optimes = 0;
+                                //rest opTimes
+                                lastOperation.opTimes = 0;
                                 currentGuess += INCREMENT;
                             }
                             lastOperation.operation = 'up';
@@ -110,7 +111,7 @@ var doSomething = function (ruler, cb) {
 
             //first Operation has been done
             //use the latest info in the array
-            var gap = (rulerLength > 1) ? (lastRuler - ruler[rulerLength - 2]) : FIRSTGAP;
+            var gap = (rulerLength > 1) ? (lastRuler - ruler[rulerLength - 2]) : FIRST_GAP;
 
             //guess the current gap using the latest gap
             var guess = lastRuler - gap / 0.9;
@@ -145,17 +146,17 @@ var doSomething = function (ruler, cb) {
                             //返回结果数量太多， 减少猜想值
                             //继续
                             if (lastOperation.operation === 'down') {
-                                lastOperation.optimes++;
-                                currentGuess -= INCREMENT * lastOperation.optimes;
+                                lastOperation.opTimes++;
+                                currentGuess -= INCREMENT * lastOperation.opTimes;
                             } else {
 
-                                //rest optimes
-                                lastOperation.optimes = 0;
+                                //rest opTimes
+                                lastOperation.opTimes = 0;
                                 currentGuess -= INCREMENT;
                             }
                             lastOperation.operation = 'down';
 
-                            //zai shang mian de ci shu
+                            //在上面的次数
                             upTimes++;
                             closestUp = currentGuess;
                             nextStep();
@@ -165,12 +166,12 @@ var doSomething = function (ruler, cb) {
                             //返回结果数量太少， 增加猜想值
                             //go on
                             if (lastOperation.operation === 'up') {
-                                lastOperation.optimes++;
-                                currentGuess += INCREMENT * lastOperation.optimes;
+                                lastOperation.opTimes++;
+                                currentGuess += INCREMENT * lastOperation.opTimes;
                             } else {
 
-                                //rest optimes
-                                lastOperation.optimes = 0;
+                                //rest opTimes
+                                lastOperation.opTimes = 0;
                                 currentGuess += INCREMENT;
                             }
                             lastOperation.operation = 'up';
@@ -234,7 +235,7 @@ var checkBetween = function (m, ul, callback) {
             args: [m, ul]
         }
     };
-    github.search.staredRepos.checkLength(params, function (err, re) {
+    github.search.staredRepos.checkLength(params, function (err, result) {
         callback(err, result);
     });
 };
@@ -250,7 +251,7 @@ function getStaredRepositories() {
         pointer: 0
     };
 
-    var loop = new Infiniteloop();
+    var loop = new InfiniteLoop();
 
     function grab() {
         doSomething(ruler, function (x) {
