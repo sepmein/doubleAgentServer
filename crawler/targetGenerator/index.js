@@ -1,13 +1,13 @@
-var db = require('../.././db');
-var secret = require('../.././config');
-var extend = require('../.././util').extend;
-var recipes = require('./recipes');
-
-var BASEURL = 'https://api.github.com/';
+var db = require('../.././db'),
+    secret = require('../.././config'),
+    extend = require('../.././util').extend,
+    recipes = require('./recipes'),
+    BASE_URL = 'https://api.github.com/';
 
 var TargetUrl = function (recipe, queryArg) {
     this.recipe = recipe;
     this.queryArg = queryArg;
+
     //随机tokenId
     var tokenId = Math.floor((Object.keys(secret).length - 1) * Math.random());
     this.token = secret[tokenId];
@@ -18,17 +18,20 @@ TargetUrl.prototype.generate = function () {
         'client_id': this.token.client_id,
         'client_secret': this.token.client_secret
     };
+
     //extend recipe qs
     extend(qs, this.recipe.qs);
+
     //extend custom qs
     if (this.queryArg.queryString) {
         extend(qs, this.queryArg.queryString);
     }
+
     //append custom url partial
     if (this.queryArg.urlAppend) {
         this.recipe.urlAppend(this.queryArg.urlAppend);
     }
-    var url = BASEURL + this.recipe.urlPartial;
+    var url = BASE_URL + this.recipe.urlPartial;
     return {
         url: url,
         qs: qs,
@@ -38,19 +41,20 @@ TargetUrl.prototype.generate = function () {
     }
 };
 
-/*  API
-    example
-    generate(
-        'staredRepos', {
-            urlAppend: {
-                type: '..',
-                args: [130, 230]
-            },
-            queryString: {
-                start_page : 10
-            }
-        }
-*/
+/*
+ * API example
+ * generate(
+ *   'staredRepos', {
+ *       urlAppend: {
+ *       type: '..',
+ *       args: [130, 230]
+ *   },
+ *   queryString: {
+ *       start_page : 10
+ *   }
+ * )
+ * */
+
 function generate(recipe, queryArg) {
     if (!recipes[recipe]) {
         console.error(new Error('You"ve enter a wrong recipe name, change it!'));

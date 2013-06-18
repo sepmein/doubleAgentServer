@@ -1,4 +1,4 @@
-var urlGenerator = require('../crawler/targetGenerator/index');
+var urlGenerator = require('.././crawler/targetGenerator');
 var assert = require('assert');
 
 describe('url Generator', function () {
