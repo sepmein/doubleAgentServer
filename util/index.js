@@ -40,6 +40,7 @@ util.extend = function (o, p) {
 //todo make changes to fit my own use case
 util.callFn = function () {
     switch (arguments.length) {
+
         // fast cases
         case 1:
             handler.call(this);
@@ -50,35 +51,40 @@ util.callFn = function () {
         case 3:
             handler.call(this, arguments[1], arguments[2]);
             break;
+
         // slower
         default:
-            len = arguments.length;
-            args = new Array(len - 1);
+            var len = arguments.length,
+                args = new Array(len - 1),
+                i;
             for (i = 1; i < len; i++)
                 args[i - 1] = arguments[i];
             handler.apply(this, args);
     }
 };
 
-//async version of bisection
-//args: 
-//  big, small: the upper and lower number of the expected section
-//  upperLimit: the upper limit of the interval 
-//check: function which accept two args
-//    the first is the middle number compares to the result
-//    the second is a callback, which will be executed when the compares finished
-//    a callback should return an error first, and a status code of the compare result second
-//    status code: -1, 0 ,1 represents: smaller, equals, bigger
-//handleResultFn: function
-//    when the status code equals 0, do sth. to the result
-util.bisection = function bisection(args, checkFn, handleResultFn) {
+/*
+ * async version of bisection
+ * args:
+ *  big, small: the upper and lower number of the expected section
+ *  upperLimit: the upper limit of the interval
+ *  check: function which accept two args
+ *      the first is the middle number compares to the result
+ *      the second is a callback, which will be executed when the compares finished
+ *  a callback should return an error first, and a status code of the compare result second
+ *      status code: -1, 0 ,1 represents: smaller, equals, bigger
+ *      handleResultFn: function
+ *      when the status code equals 0, do sth. to the result
+ * */
+
+ util.bisection = function bisection(args, checkFn, handleResultFn) {
     var big = args.big,
         small = args.small,
         upperLimit = args.upperLimit,
         m = Math.floor((big - small) / 2) + small;
-    var next = function (e, r) {
-        if (e) {
-            console.log(e);
+    var next = function (error, result) {
+        if (error) {
+            console.log(error);
         } else {
             if (result === 0) {
                 handleResultFn(m);
@@ -89,7 +95,6 @@ util.bisection = function bisection(args, checkFn, handleResultFn) {
                 args.small = m;
                 bisection(args, checkFn, handleResultFn);
             }
-
         }
     }
     if (upperLimit == undefined) {

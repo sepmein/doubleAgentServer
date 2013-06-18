@@ -1,13 +1,13 @@
 var db = require('../.././db'),
     secret = require('../.././config'),
     extend = require('../.././util').extend,
-    recipes = require('./recipes');
-,
-BASE_URL = 'https://api.github.com/';
+    recipes = require('./recipes'),
+    BASE_URL = 'https://api.github.com/';
 
 var TargetUrl = function (recipe, queryArg) {
     this.recipe = recipe;
     this.queryArg = queryArg;
+
     //随机tokenId
     var tokenId = Math.floor((Object.keys(secret).length - 1) * Math.random());
     this.token = secret[tokenId];
@@ -18,12 +18,15 @@ TargetUrl.prototype.generate = function () {
         'client_id': this.token.client_id,
         'client_secret': this.token.client_secret
     };
+
     //extend recipe qs
     extend(qs, this.recipe.qs);
+
     //extend custom qs
     if (this.queryArg.queryString) {
         extend(qs, this.queryArg.queryString);
     }
+
     //append custom url partial
     if (this.queryArg.urlAppend) {
         this.recipe.urlAppend(this.queryArg.urlAppend);
@@ -38,19 +41,19 @@ TargetUrl.prototype.generate = function () {
     }
 };
 
-/*  API
- example
- generate(
- 'staredRepos', {
- urlAppend: {
- type: '..',
- args: [130, 230]
- },
- queryString: {
- start_page : 10
- }
- }
- */
+/*
+ * API example
+ * generate(
+ *   'staredRepos', {
+ *       urlAppend: {
+ *       type: '..',
+ *       args: [130, 230]
+ *   },
+ *   queryString: {
+ *       start_page : 10
+ *   }
+ * )
+ * */
 
 function generate(recipe, queryArg) {
     if (!recipes[recipe]) {

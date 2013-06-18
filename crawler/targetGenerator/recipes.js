@@ -19,18 +19,19 @@ var recipes = {
     },
 
     /*
-     example: object passed to targetGenerator
-     'staredRepos', {
-     urlAppend: {
-     type: '..',
-     args: [130, 230]
-     },
-     start_page: 10
-     }
+     *example: object passed to targetGenerator
+     * 'staredRepos', {
+     *      urlAppend: {
+     *      type: '..',
+     *      args: [130, 230]
+     *  },
+     *  start_page: 10
+     * }
      */
     'staredRepos': {
         urlPartial: 'legacy/repos/search/stars:',
         urlAppend: function (obj) {
+
             //argument: type, num
             var type = obj.type;
             var args = obj.args;
@@ -56,6 +57,7 @@ var recipes = {
     'followedUsers': {
         urlPartial: 'legacy/users/search/follows:',
         urlAppend: function (obj) {
+
             //argument: type, num
             var type = obj.type;
             var args = obj.args;

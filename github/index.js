@@ -1,4 +1,4 @@
-/*github api*/
+//github api
 var github = {},
     makeRequest = require('.././crawler').makeRequest,
     targetGenerator = require('.././crawler/targetGenerator');

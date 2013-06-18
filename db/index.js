@@ -1,11 +1,11 @@
 var mongodb = require('mongodb'),
     async = require('async'),
     EventEmitter = require('events').EventEmitter,
-    mongoClient = mongodb.MongoClient;
-,
-db = new EventEmitter();
+    mongoClient = mongodb.MongoClient,
+    db = new EventEmitter();
 
 db.connect = function (callback) {
+
     //connection
     mongoClient.connect('mongodb://localhost/doubleAgent', function (err, db) {
         if (err) {
@@ -58,6 +58,7 @@ db.save = function (db, coll, obj, cb) {
     //wrap around async
     async.waterfall([
         function (callback) {
+
             //collection
             if (db !== null) {
                 db.collection(coll, function (err, collection) {
@@ -69,6 +70,7 @@ db.save = function (db, coll, obj, cb) {
 
         },
         function (collection, callback) {
+
             //insert
             if (obj._id !== null && typeof obj.name) {
                 collection.save(obj, function (err, result) {
@@ -79,6 +81,7 @@ db.save = function (db, coll, obj, cb) {
             }
         }
     ], function (err, result) {
+
             //传递结果
             cb(err, result);
         }
