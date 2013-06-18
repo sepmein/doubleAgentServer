@@ -1,20 +1,20 @@
 //todo: make this live
-var TOTALESTIMATE = {
+var TOTAL_ESTIMATE = {
     allRepos: 10000000,
     allUsers: 4420000
 };
 
 var recipes = {
-    'allRepos': {
+    'allRepos'     : {
         urlPartial: 'repositories',
-        qs: {
-            since: Math.floor(Math.random() * TOTALESTIMATE['allRepos'])
+        qs        : {
+            since: Math.floor(Math.random() * TOTAL_ESTIMATE['allRepos'])
         }
     },
-    'allUsers': {
+    'allUsers'     : {
         urlPartial: 'users',
-        qs: {
-            since: Math.floor(Math.random() * TOTALESTIMATE['allUsers'])
+        qs        : {
+            since: Math.floor(Math.random() * TOTAL_ESTIMATE['allUsers'])
         }
     },
 
@@ -28,9 +28,9 @@ var recipes = {
      *  start_page: 10
      * }
      */
-    'staredRepos': {
+    'staredRepos'  : {
         urlPartial: 'legacy/repos/search/stars:',
-        urlAppend: function (obj) {
+        urlAppend : function (obj) {
 
             //argument: type, num
             var type = obj.type;
@@ -50,13 +50,13 @@ var recipes = {
                     break;
             }
         },
-        qs: {
+        qs        : {
             per_page: 100
         }
     },
     'followedUsers': {
         urlPartial: 'legacy/users/search/follows:',
-        urlAppend: function (obj) {
+        urlAppend : function (obj) {
 
             //argument: type, num
             var type = obj.type;
@@ -76,7 +76,7 @@ var recipes = {
                     break;
             }
         },
-        qs: {
+        qs        : {
             per_page: 100
         }
     }

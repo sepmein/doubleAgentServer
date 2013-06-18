@@ -5,7 +5,42 @@
 
 var InfiniteLoop = require('Infinite-loop'),
     bisection = require('.././util').bisection,
-    github = require('.././github');
+    github = require('.././github'),
+    async = require('async');
+
+var getSeperator = function getSeperatorF(callback) {
+    var BIGGEST_STARS_REPOS_NUM_BIGGER_THAN_1000 = 33,
+        biggestStarReposNumPointer = BIGGEST_STARS_REPOS_NUM_BIGGER_THAN_1000,
+        doubleChecked = false;
+
+    if (!doubleChecked) {
+
+        //获取star数大于1000的最大值
+        checkEqualsTo(biggestStarReposNumPointer, function (err, result) {
+
+            //符合要求，返回的结果数在900~1000之间
+            if (result === 0) {
+
+                //double check next
+                biggestStarReposNumPointer++;
+                doubleChecked = true;
+            }
+
+            //数量大于1000
+            else if (result === 1) {
+                biggestStarReposNumPointer++;
+            }
+
+            //数量小于900
+            else if (result === -1) {
+                biggestStarReposNumPointer--;
+            }
+            getSeperatorF(callback);
+        });
+    } else {
+        callback(biggestStarReposNumPointer);
+    }
+};
 
 var doSomething = function (ruler, cb) {
 
@@ -21,11 +56,10 @@ var doSomething = function (ruler, cb) {
         closestUp,
         lastOperation = {
             operation: null,
-            opTimes: 0
+            opTimes  : 0
         },
         rulerLength = ruler.length,
-        lastRuler = ruler[ruler.length - 1],
-        BIGGEST_STARS_REPOS_NUM_BIGGER_THAN_1000 = 32;
+        lastRuler = ruler[ruler.length - 1];
 
     //两分法算法获取需要获取的值
     if (ruler.length === 0) {
@@ -242,12 +276,12 @@ var checkBetween = function (m, ul, callback) {
 
 var crawlStaredRepos = function () {
 
-}
+};
 
 function getStaredRepositories() {
 
     var ruler = {
-        ruler: [],
+        ruler  : [],
         pointer: 0
     };
 
@@ -271,4 +305,12 @@ function getStaredRepositories() {
 
 }
 
+async.waterfall([function (callback) {
+    getSeperator(callback);
+}, function (seperator, callback) {
+
+}
+], function (seperator, callback) {
+
+});
 
