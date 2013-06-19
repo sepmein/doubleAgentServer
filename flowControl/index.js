@@ -3,7 +3,6 @@
 var t9Util = require('.././util'),
     inherits = require('util').inherits,
     async = require('async'),
-    Infiniteloop = require('infinite-loop'),
     EventEmitter = require('events').EventEmitter,
 
 // the limitation is 720ms/request
@@ -149,8 +148,7 @@ slaves.bornABabySlave = function (since) {
 //@type: function
 //@param: seal, generated at the borning state of a baby slave
 slaves.killTheElderSlave = function (seal) {
-    var killed = delete this.list[seal];
-    return killed;
+    return delete this.list[seal];
 };
 
 module.exports = flowControl;

@@ -22,7 +22,6 @@ db.checkSaved = function (ee, db, coll, obj, cb) {
 
     async.waterfall([
         function (callback) {
-
             if (db !== null) {
                 db.collection(coll, function (err, collection) {
                     callback(err, collection);
@@ -30,7 +29,6 @@ db.checkSaved = function (ee, db, coll, obj, cb) {
             } else {
                 callback(new Error('mongodb no dbs'));
             }
-
         },
         function (collection, callback) {
             collection.findOne({
