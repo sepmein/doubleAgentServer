@@ -29,6 +29,7 @@ function crawlGithub(database, to) {
     master.start(crawler.makeRequest, {
         recipeName: 'allRepos'
     }, function (err, results) {
+
         //console.log('request made');
         if (err) {
             console.log(err);
