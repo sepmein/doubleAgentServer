@@ -1,9 +1,8 @@
-var crawler = require('./crawler');
-var targetGenerator = require('./crawler/targetGenerator');
-var db = require('./db');
-var flowControl = require('./flowControl');
-var domain = require('domain');
-var github = require('./github');
+var crawler = require('./crawler',
+    db = require('./db'),
+    flowControl = require('./flowControl'),
+    domain = require('domain'),
+    github = require('./github');
 
 var doubleAgent = domain.create();
 
