@@ -10,7 +10,7 @@ var util = util || {};
  * @param {String} email Email地址
  * @return {Boolean} 成功返回1，否则返回0
  */
-util.validateEmail = function (email) {
+util.validateEmail = function(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 };
@@ -21,7 +21,7 @@ util.validateEmail = function (email) {
  * @param {Number} length 生成
  * @return {String} 长度为length、包含数字及大小写、随机排列的字符串
  */
-util.generateRandom = function (length) {
+util.generateRandom = function(length) {
     var s = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var result = "";
     for (var i = length || 6; i > 0; i--) {
@@ -30,7 +30,7 @@ util.generateRandom = function (length) {
     return result;
 };
 
-util.extend = function (o, p) {
+util.extend = function(o, p) {
     for (var prop in p) {
         o[prop] = p[prop];
     }
@@ -38,7 +38,7 @@ util.extend = function (o, p) {
 };
 
 //todo make changes to fit my own use case
-util.callFn = function () {
+util.callFn = function() {
     switch (arguments.length) {
 
         // fast cases
@@ -52,7 +52,7 @@ util.callFn = function () {
             handler.call(this, arguments[1], arguments[2]);
             break;
 
-        // slower
+            // slower
         default:
             var len = arguments.length,
                 args = new Array(len - 1),
@@ -77,12 +77,12 @@ util.callFn = function () {
  *      when the status code equals 0, do sth. to the result
  * */
 
- util.bisection = function bisection(args, checkFn, handleResultFn) {
+util.bisection = function bisection(args, checkFn, handleResultFn) {
     var big = args.big,
         small = args.small,
         upperLimit = args.upperLimit,
         m = Math.floor((big - small) / 2) + small;
-    var next = function (error, result) {
+    var next = function(error, result) {
         if (error) {
             console.log(error);
         } else {
@@ -102,6 +102,29 @@ util.callFn = function () {
     } else {
         checkFn(m, upperLimit, next);
     }
+};
+
+
+/**
+*@method insertionSort 插入排序
+*@params
+*A array to be sorted
+*field 
+*cb callback
+*/
+util.insertionSort = function(A, field, cb) {
+    for (var j = 1; j < A.length; j++) {
+        var key = A[j],
+            b = A[j][field];
+        //Insert A[j] into the sorted sequence A[1..j-1].
+        var i = j - 1;
+        while (i >= 0 && A[i][field] > b) {
+            A[i + 1] = A[i];
+            i--;
+        }
+        A[i + 1] = key;
+    }
+    cb(A);
 };
 
 module.exports = util;
